@@ -139,6 +139,52 @@ cloudfunctions/
 
 **已脱敏**：4 个真实 openid、3 个用户昵称、OpenID 派生的数字 ID 全部替换为占位符，共 587 处。脱敏后 JSONL 仍可正常解析。
 
+## 换云环境后如何恢复
+
+代码里的环境 ID 是硬编码的，换环境需要改三处 + 迁移数据 + 回传图片。
+
+**1. 改代码里的环境 ID**
+
+| 文件 | 位置 |
+|---|---|
+| `miniprogram/app.js` | `wx.cloud.init({ env: '...' })` |
+| `miniprogram/config/constants.js` | `CLOUD_ENV_ID` |
+| `miniprogram/config/constants.js` | `CLOUD_ID_PREFIX`（形如 `cloud://<envId>.<bucketPrefix>`） |
+
+**2. 导入数据**
+
+`数据库/` 下的 JSONL 可在云开发控制台按集合逐个导入：`article`、`comments`、`documents`、`document_article`、`user`。
+
+**3. 回传云存储图片**
+
+文章正文里引用了 185 个云存储图片（另有 comments/document_article/user 中的头像等 21 处）。这些图片文件需要重新上传到新环境的存储桶，路径保持一致。
+
+**4. 改写导出文件里的环境引用**
+
+JSONL 里的图片地址是 `cloud://<旧envId>.<旧bucket>/<path>` 形式，换环境后必须改写，否则图片全部失效：
+
+```bash
+# 先看会改什么（不写盘）
+python tools/rewrite_cloud_env.py \
+    --old-env cloud1-4gt9emvjfe812487 \
+    --new-env cloud1-NEWENVID \
+    --new-bucket 636c-cloud1-NEWENVID-1234567890 \
+    --dry-run
+
+# 确认后改写
+python tools/rewrite_cloud_env.py \
+    --old-env cloud1-4gt9emvjfe812487 \
+    --new-env cloud1-NEWENVID \
+    --new-bucket 636c-cloud1-NEWENVID-1234567890
+```
+
+`bucketPrefix` 的取法：云开发控制台 → 存储 → 点开任一文件看 FileID，形如 `cloud://<envId>.<bucketPrefix>/<path>`，取中间那段。
+
+**5. 上传云函数**
+
+四个云函数都要重新部署。`searchCourts` 需在环境变量里配 `MAP_KEY`（腾讯地图 Key）；`generateDocumentPDF` 上传前在该目录执行 `npm install`（依赖 `pdfkit`）。
+
+
 ## 许可
 
 仅作学习与作品展示用途。文书模板与法律内容仅供参考，不构成法律意见。
