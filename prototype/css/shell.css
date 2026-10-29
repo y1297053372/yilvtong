@@ -1,0 +1,195 @@
+/* ============================================================
+   设备外壳样式 v2 — 还原真机视觉 375x812
+   ============================================================ */
+*,*::before,*::after { box-sizing: border-box; }
+html, body { margin:0; padding:0; min-height:100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background:#eceff4;
+  background-image:
+    radial-gradient(circle at 18% 10%, #e5ebf4 0%, transparent 44%),
+    radial-gradient(circle at 84% 80%, #dee6f1 0%, transparent 48%);
+  color:#1e293b;
+  -webkit-font-smoothing:antialiased;
+  display:flex; justify-content:center;
+  padding:40px 20px 60px;
+}
+
+.device {
+  position:relative; width:375px; height:812px;
+  background:#fff; border-radius:46px;
+  box-shadow: 0 0 0 10px #1b1d22, 0 0 0 12px #383b42,
+              0 28px 64px rgba(15,23,42,.34), 0 8px 20px rgba(15,23,42,.16);
+  flex-shrink:0;
+}
+
+.device-screen {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  overflow:hidden; border-radius:36px;
+  background:var(--page-bg,#f8fafc);
+  isolation:isolate;
+}
+
+.device::after {
+  content:""; position:absolute; top:11px; left:50%;
+  transform:translateX(-50%);
+  width:108px; height:26px; background:#0b0c0e;
+  border-radius:14px; z-index:10000; pointer-events:none;
+}
+
+/* 状态栏 */
+.status-bar {
+  height:44px; flex-shrink:0; display:flex; align-items:center;
+  justify-content:space-between; padding:0 26px 0 32px;
+  font-size:14px; font-weight:600; color:#1e293b;
+  background:var(--nav-bg,#fff); position:relative; z-index:30;
+}
+.status-bar .sb-right { display:flex; align-items:center; gap:5px; }
+.status-bar .sb-signal,
+.status-bar .sb-wifi { display:inline-block; height:11px; background-repeat:no-repeat; background-size:contain; }
+.status-bar .sb-signal {
+  width:17px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 11'><rect x='0' y='7' width='3' height='4' rx='1' fill='%231e293b'/><rect x='4.5' y='5' width='3' height='6' rx='1' fill='%231e293b'/><rect x='9' y='2.5' width='3' height='8.5' rx='1' fill='%231e293b'/><rect x='13.5' y='0' width='3' height='11' rx='1' fill='%231e293b'/></svg>");
+}
+.status-bar .sb-wifi {
+  width:15px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 11'><path d='M7.5 10.5 10 7.6a3.6 3.6 0 0 0-5 0z' fill='%231e293b'/><path d='M3.2 5.6a6.6 6.6 0 0 1 8.6 0l1.3-1.6a8.7 8.7 0 0 0-11.2 0z' fill='%231e293b'/></svg>");
+}
+.status-bar .sb-battery {
+  display:inline-block; width:25px; height:12px;
+  border:1.2px solid rgba(30,41,59,.4); border-radius:3.5px; position:relative;
+}
+.status-bar .sb-battery::before {
+  content:""; position:absolute; inset:1.6px; right:6px;
+  background:#1e293b; border-radius:1.6px;
+}
+.status-bar .sb-battery::after {
+  content:""; position:absolute; right:-3.4px; top:3.4px;
+  width:2px; height:4.6px; background:rgba(30,41,59,.4);
+  border-radius:0 1.5px 1.5px 0;
+}
+
+/* 滚动区 */
+.screen-scroll {
+  flex:1; min-height:0; overflow-y:auto; overflow-x:hidden;
+  scrollbar-width:none; position:relative;
+}
+.screen-scroll::-webkit-scrollbar { width:0; height:0; }
+.page-scope { position:relative; min-height:100%; }
+
+/* custom-header：小程序里 fixed 贴顶，原型里做正常流式元素 */
+.device-screen .cmp-custom_header { flex-shrink:0; position:relative; z-index:25; }
+.device-screen .cmp-custom_header .custom-header {
+  position:relative !important; top:auto !important;
+  left:auto !important; right:auto !important;
+}
+.device-screen .cmp-custom_header .header-placeholder { display:none !important; }
+
+/* TabBar */
+.device-tabbar {
+  flex-shrink:0; height:56px; background:#fff;
+  border-top:1px solid rgba(226,232,240,.9);
+  position:relative; z-index:30; overflow:hidden;
+}
+.device-tabbar .tab-bar {
+  position:static !important; width:100% !important; height:56px !important;
+  display:flex !important; padding:0 !important; margin:0 !important;
+  background:transparent !important;
+}
+.device-tabbar .tab-bar-item {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:3px; height:56px; cursor:pointer; padding:0;
+}
+.device-tabbar .icon-wrapper {
+  width:24px; height:24px; display:flex; align-items:center;
+  justify-content:center; flex-shrink:0;
+}
+.device-tabbar .tab-bar-icon {
+  width:22px; height:22px; display:block; object-fit:contain;
+}
+.device-tabbar .tab-bar-text {
+  font-size:10px; line-height:1.15; color:#94a3b8; white-space:nowrap;
+}
+.device-tabbar .tab-bar-item.active .tab-bar-text {
+  color:#1152d4; font-weight:600;
+}
+
+/* Home Indicator */
+.home-bar {
+  position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+  width:134px; height:5px; border-radius:3px;
+  background:rgba(30,41,59,.3); z-index:9998; pointer-events:none;
+}
+
+.page-transition-mask { display:none !important; }
+
+/* 说明卡片 */
+.proto-notes {
+  position:fixed; top:40px; right:28px; width:248px;
+  background:#fff; border:1px solid #dde4ee; border-radius:14px;
+  padding:18px 20px; font-size:12.5px; line-height:1.75; color:#5a6472;
+  box-shadow:0 8px 28px rgba(15,23,42,.08); z-index:200;
+}
+.proto-notes h4 {
+  margin:0 0 12px; font-size:10.5px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase; color:#9aa4b2;
+}
+.proto-notes .kv { display:flex; justify-content:space-between; gap:12px; padding:3px 0; }
+.proto-notes .kv b { color:#1e293b; font-weight:600; }
+.proto-notes .tip {
+  margin-top:12px; padding-top:12px; border-top:1px solid #eef2f7;
+  font-size:11.5px; color:#9aa4b2; line-height:1.65;
+}
+@media (max-width:1120px) { .proto-notes { display:none; } }
+
+/* ============================================================
+   修正：logo 与 TabBar 细节
+   ============================================================ */
+
+/* custom-header 的 logo 是白色图标（filter: invert 成白），
+   它依赖 .logo-box 的深色渐变底才有对比度。
+   app.wxss 里 logo-box 用了 var(--primary-color) 渐变，
+   这里补一个稳妥的深色底，保证白 logo 可见。 */
+.device-screen .cmp-custom_header .logo-box {
+  background: linear-gradient(135deg, #1152d4, #2563eb) !important;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(17, 82, 212, 0.3);
+}
+
+.device-screen .cmp-custom_header .logo-image {
+  width: 20px !important;
+  height: 20px !important;
+  filter: brightness(0) invert(1) !important;
+  object-fit: contain;
+}
+
+/* TabBar：文字不要被 56px 容器裁掉，整体缩一点 */
+.device-tabbar {
+  height: 60px !important;
+}
+.device-tabbar .tab-bar { height: 60px !important; }
+.device-tabbar .tab-bar-item { height: 60px !important; gap: 2px !important; }
+.device-tabbar .icon-wrapper { width: 22px !important; height: 22px !important; }
+.device-tabbar .tab-bar-icon { width: 21px !important; height: 21px !important; }
+.device-tabbar .tab-bar-text {
+  font-size: 9.5px !important;
+  line-height: 1.1 !important;
+  margin-top: 1px;
+}
+
+/* TabBar 文案兜底：防止某些项因宽度不足被压缩 */
+.device-tabbar .tab-bar-item { min-width: 0; }
+.device-tabbar .tab-bar-text {
+  display: block;
+  width: 100%;
+  text-align: center;
+  overflow: visible;
+  letter-spacing: 0;
+  transform: none;
+}
