@@ -1,0 +1,11 @@
+{
+  "name": "contentCheck",
+  "version": "1.0.0",
+  "description": "Content safety check",
+  "main": "index.js",
+  "author": "Trae",
+  "license": "MIT",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

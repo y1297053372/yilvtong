@@ -1,0 +1,10 @@
+{
+  "name": "generateDocumentPDF",
+  "version": "1.0.0",
+  "description": "通用文书PDF生成",
+  "main": "index.js",
+  "dependencies": {
+    "pdfkit": "^0.14.0",
+    "wx-server-sdk": "latest"
+  }
+}
