@@ -45,10 +45,10 @@ TPL = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} · 衣律通小程序原型</title>
-<link rel="stylesheet" href="css/app.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/tabbar.css">
-<link rel="stylesheet" href="css/shell.css">
+<link rel="stylesheet" href="css/app.css?v=3">
+<link rel="stylesheet" href="css/components.css?v=3">
+<link rel="stylesheet" href="css/tabbar.css?v=3">
+<link rel="stylesheet" href="css/shell.css?v=3">
 </head>
 <body>
 <div class="device">
@@ -63,7 +63,7 @@ TPL = """<!DOCTYPE html>
   <div class="home-bar"></div>
 </div>
 {notes}
-<script src="_proto.js"></script>
+<script src="_proto.js?v=3"></script>
 </body>
 </html>
 """
