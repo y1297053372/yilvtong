@@ -15,6 +15,7 @@ sys.path.insert(0, "tools")
 from component_render import scope_css
 
 PAGES_OUT = "prototype/pages"
+NL = chr(10)
 
 
 def build(base_css, app_wxss, page_map, out_path):
@@ -40,7 +41,13 @@ def build(base_css, app_wxss, page_map, out_path):
         parts.append("/* ================= %s.wxss ================= */" % page)
         parts.append(scoped)
 
-    out = "\n\n".join(parts)
+    out = NL.join(parts)
+
+    # 100vh 语义修正：小程序里 100vh = 整屏（含状态栏与导航栏），
+    # 但原型的内容区已扣掉状态栏 + 导航栏 + TabBar，
+    # 直接用 100vh 会把内容撑出屏幕。
+    out = out.replace("100vh", "100%")
+
     with io.open(out_path, "w", encoding="utf-8") as fh:
         fh.write(out)
     return len(out)

@@ -197,3 +197,65 @@ body {
 /* Home 条与 TabBar 重叠：给有 TabBar 的页面留出底部安全区 */
 .device-tabbar { padding-bottom: 14px !important; height: 70px !important; }
 .device-tabbar .tab-bar { height: 56px !important; }
+
+/* ---------- image mode 语义还原 ---------- */
+/* 小程序 <image> 默认 320x240 且有固定尺寸感，这里按 mode 还原 */
+img[data-fit="width-fix"] {
+  object-fit: contain;
+  height: auto !important;      /* 宽度固定、高度自适应 */
+  max-height: none !important;
+}
+img[data-fit="height-fix"] {
+  object-fit: contain;
+  width: auto !important;
+}
+img[data-fit="fill"] { object-fit: fill; }
+
+/* 轮播图里的图：跟随卡片宽度，高度撑满 */
+.wx-swiper-item img { width: 100%; }
+
+/* ---------- swiper 尺寸约束 ---------- */
+.wx-swiper { overflow: hidden; }
+.wx-swiper-item { height: 100%; }
+.wx-swiper-item > * { height: 100%; }
+/* 轮播图图片必须撑满容器高度，否则按原图比例溢出 */
+.wx-swiper-item img,
+.banner-card .banner-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* ---------- 表单页：修正 100vh 语义 ---------- */
+/* 小程序里 100vh = 整屏；原型里容器高度是 812，应减去导航栏与状态栏 */
+.scope-complaint_form .form-content,
+.scope-report_form .form-content,
+.scope-negotiation_form .form-content {
+  min-height: auto !important;
+  height: auto !important;
+}
+
+/* 步骤条顶部留白不要过大（原型没有状态栏遮挡问题） */
+.scope-complaint_form .steps-header,
+.scope-report_form .steps-header,
+.scope-negotiation_form .steps-header {
+  padding-top: 8px !important;
+}
+
+/* 表单内容不需要再让出导航栏高度（导航栏已是独立 flex 项） */
+.scope-complaint_form .form-content,
+.scope-report_form .form-content,
+.scope-negotiation_form .form-content {
+  padding-top: 12px !important;
+}
+
+/* ---------- 全屏容器：填充滚动区而非 100vh ---------- */
+/* 小程序 .container{height:100vh} 在原型里会撑出屏幕 */
+.page-scope > .container,
+.page-scope > .page,
+.scope-knowledge .container {
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+}

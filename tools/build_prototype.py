@@ -159,6 +159,11 @@ def build_ctx(page, bundle):
             ],
         }
         base["currentSubCategory"] = {"id": "all", "children": []}
+        # 这些尺寸原本由 wx.createSelectorQuery().boundingClientRect() 测得
+        # 原页面用 createSelectorQuery 测得的图标盒尺寸
+        base["iconBoxSize"] = 40
+        base["indicatorWidth"] = 70
+        base["indicatorHeight"] = 26
         base["level1Name"] = "证据搜集"
         base["level1Desc"] = "知道该拍什么，怎么拍才有效"
         base["articles"] = art_cards
@@ -214,10 +219,12 @@ def build_ctx(page, bundle):
     if page.endswith("-form"):
         base.update({
             "currentStep": 0,
-            "headerHeight": 158,
-            "totalHeaderHeight": 178,
+            "headerHeight": 108,
+            "totalHeaderHeight": 128,
             "paddingBottom": 34,
             "pageScrollDisabled": False,
+            # 原型固定在第 1 步，避免模板里出现 '100vh' 字面量
+            "isPreviewStep": False,
             "steps": [
                 {"title": "当事人", "index": 0},
                 {"title": "法院", "index": 1},
@@ -271,6 +278,16 @@ def fix_asset_paths(html):
                   r'src="assets/\1"', html)
     # 4) 空 src 去掉
     html = re.sub(r'\ssrc=""', "", html)
+
+    # 5) 内联样式里的 100vh：小程序是整屏，原型内容区已扣掉导航栏，
+    #    直接用会撑出屏幕
+    html = html.replace("100vh", "100%")
+
+    # 6) 空单位兜底（如 "width: px"），清掉无效声明
+    html = re.sub(r"(width|height|top|left|right|bottom|margin|padding)\s*:\s*px\s*;?",
+                  "", html)
+    html = re.sub(r"-\s*px\s*/\s*2", "- 0px/2", html)
+
     return html
 
 

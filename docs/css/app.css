@@ -280,9 +280,7 @@ span { display: inline; }
   white-space: nowrap;
 }
 
-
 /* ================= app.wxss ================= */
-
 /** app.wxss */
  :root{
   /* 基础颜色 */
@@ -381,7 +379,7 @@ span { display: inline; }
 
 /* 滚动容器通用样式 */
 .scroll-container {
-  height: 100vh;
+  height: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -436,7 +434,7 @@ span { display: inline; }
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 99999;
   pointer-events: none;
 }
@@ -449,12 +447,10 @@ span { display: inline; }
   background-color: #111111;
 }
 
-
 /* ================= index.wxss ================= */
-
 .scope-index .page {
   background-color: var(--page-bg);
-  min-height: 100vh;
+  min-height: 100%;
   
   
 }
@@ -842,15 +838,13 @@ span { display: inline; }
 }
 
 
-
 /* ================= knowledge.wxss ================= */
-
 .scope-knowledge {
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 .scope-knowledge .container {
-  height: 100vh;
+  height: 100%;
   background-color: var(--page-bg);
   display: flex;
   flex-direction: column;
@@ -1200,12 +1194,10 @@ span { display: inline; }
 }
 
 
-
 /* ================= article.wxss ================= */
-
 .scope-article .container {
   background-color: var(--card-bg);
-  min-height: 100vh;
+  min-height: 100%;
 }
 .scope-article .content-wrapper {
   padding: 16px;
@@ -1692,9 +1684,7 @@ span { display: inline; }
 }
 
 
-
 /* ================= document.wxss ================= */
-
 .scope-document .section {
   margin-bottom: 12px;
 }
@@ -1740,7 +1730,7 @@ span { display: inline; }
   border-radius: 3px;
 }
 .scope-document .container {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1993,11 +1983,9 @@ span { display: inline; }
 
 
 
-
 /* ================= complaint-form.wxss ================= */
-
 .scope-complaint_form .container {
-  min-height: 100vh;
+  min-height: 100%;
   display: block; 
   background-color: var(--page-bg);
   box-sizing: border-box;
@@ -3071,12 +3059,10 @@ span { display: inline; }
 }
 
 
-
 /* ================= complaint-detail.wxss ================= */
-
 .scope-complaint_detail .container {
   background: #F7F8FA;
-  min-height: 100vh;
+  min-height: 100%;
   display: block;
 }
 .scope-complaint_detail .content-wrapper {
@@ -3316,11 +3302,9 @@ span { display: inline; }
 }
 
 
-
 /* ================= report-form.wxss ================= */
-
 .scope-report_form .container {
-  min-height: 100vh;
+  min-height: 100%;
   display: block;
   background-color: var(--page-bg);
   box-sizing: border-box;
@@ -4394,12 +4378,10 @@ span { display: inline; }
 
 
 
-
 /* ================= report-detail.wxss ================= */
-
 .scope-report_detail .container {
   background: #F7F8FA;
-  min-height: 100vh;
+  min-height: 100%;
   display: block;
 }
 .scope-report_detail .content-wrapper {
@@ -4571,11 +4553,9 @@ span { display: inline; }
 
 
 
-
 /* ================= negotiation-form.wxss ================= */
-
 .scope-negotiation_form .container {
-  min-height: 100vh;
+  min-height: 100%;
   display: block;
   background-color: var(--page-bg);
   box-sizing: border-box;
@@ -5592,12 +5572,10 @@ span { display: inline; }
 
 
 
-
 /* ================= negotiation-detail.wxss ================= */
-
 .scope-negotiation_detail .container {
   background: #F7F8FA;
-  min-height: 100vh;
+  min-height: 100%;
   display: block;
 }
 .scope-negotiation_detail .content-wrapper {
@@ -5769,9 +5747,7 @@ span { display: inline; }
 
 
 
-
 /* ================= agency.wxss ================= */
-
 .scope-agency {
   height: 100%;
   overflow: hidden;
@@ -5782,7 +5758,7 @@ span { display: inline; }
   height: 0;
 }
 .scope-agency .container {
-  height: 100vh;
+  height: 100%;
   background-color: var(--page-bg);
   display: flex;
   flex-direction: column;
@@ -6179,19 +6155,17 @@ span { display: inline; }
 
 
 
-
 /* ================= profile.wxss ================= */
-
 .scope-profile {
   background-color: var(--page-bg);
 }
 .scope-profile .container {
-  height: 100vh;
+  height: 100%;
   position: relative;
   overflow: hidden;
 }
 .scope-profile .scroll-container {
-  height: 100vh;
+  height: 100%;
   
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -6528,11 +6502,9 @@ span { display: inline; }
 
 
 
-
 /* ================= my-documents.wxss ================= */
-
 .scope-my_documents .container {
-  min-height: 100vh;
+  min-height: 100%;
   background-color: var(--page-bg);
   display: flex;
   flex-direction: column;
@@ -6827,11 +6799,9 @@ span { display: inline; }
 
 
 
-
 /* ================= search.wxss ================= */
-
 .scope-search .container {
-  min-height: 100vh;
+  min-height: 100%;
   background-color: var(--page-bg);
 }
 .scope-search .results-area {
@@ -7011,11 +6981,9 @@ span { display: inline; }
   width: 24px;
   height: 24px;
 }
-
 /* ================= list.wxss ================= */
-
 .scope-list .container {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -7199,15 +7167,13 @@ span { display: inline; }
 
 
 
-
 /* ================= document-article.wxss ================= */
-
 .scope-document_article .container {
-  min-height: 100vh;
+  min-height: 100%;
   background-color: var(--page-bg);
 }
 .scope-document_article .scroll-container {
-  height: calc(100vh - 44px);
+  height: calc(100% - 44px);
 }
 .scope-document_article .content-wrapper {
   padding: 0 16px;
@@ -7258,13 +7224,11 @@ span { display: inline; }
 }
 
 
-
 /* ================= complaint-edit.wxss ================= */
-
 .scope-complaint_edit .edit-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   background: #F7F8FA;
 }
 .scope-complaint_edit .edit-header {

@@ -69,9 +69,14 @@ def attr_to_html(name, val, tag):
                 "aspectFit": "contain",
                 "aspectFill": "cover",
                 "scaleToFill": "fill",
-                "widthFix": "cover",
-                "heightFix": "cover",
-            }.get(val, "cover")
+                "widthFix": "width-fix",     # 宽度固定、高度自适应，不裁剪
+                "heightFix": "height-fix",
+                "top": "cover",
+                "bottom": "cover",
+                "center": "cover",
+                "left": "cover",
+                "right": "cover",
+            }.get(val, "fill")
             return 'data-fit="%s"' % fitting
 
     if name in DROP_ATTRS:

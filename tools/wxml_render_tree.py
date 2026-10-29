@@ -16,6 +16,7 @@ import re
 
 from wxml2html import TAG_MAP, parse_attrs, attr_to_html, quote
 from wxml_render import interp, eval_expr, truthy, to_str
+from builtin_components import render_builtin
 
 
 class Node:
@@ -199,6 +200,16 @@ def render_node(node, ctx, skip_cond=False, skip_for=False):
             from wxml_render import interp as _interp
             return '<div class="mp-html">%s</div>' % _interp(c, ctx)
         return ""
+
+    # 小程序内置组件（swiper / scroll-view / picker / radio ...）
+    # 它们有内置行为，不能只换标签名
+    builtin = render_builtin(
+        node, ctx,
+        lambda n, c: render_children(n, c),
+        interp,
+    )
+    if builtin is not None:
+        return builtin
 
     html_tag = norm_tag(node.tag)
 
