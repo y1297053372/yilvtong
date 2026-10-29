@@ -1,0 +1,57 @@
+# ---------- 依赖 ----------
+node_modules/
+**/node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# ---------- 微信开发者工具 ----------
+# 个人本地配置（含 private 设置、可能有 AppID 相关项）
+miniprogram/project.private.config.json
+project.private.config.json
+# 云函数本地依赖与缓存
+cloudfunctions/**/node_modules/
+cloudfunctions/**/package-lock.json
+
+# ---------- 构建产物 ----------
+yilvtong-video/out/
+yilvtong-video/build/
+dist/
+build/
+
+# ---------- 大体积素材 ----------
+# 云端图片备份（341MB，不影响代码阅读）
+cloud_backup/
+
+# ---------- 隐私与个人材料 ----------
+# 简历等个人文件不进公开仓库
+*.pdf
+!文档/**/*.pdf
+# 工作室内部材料（招新公告含劳务分成等内部政策）
+纳新群群公告.txt
+
+# ---------- 已失效的一次性脚本 ----------
+# 路径指向不存在的 项目需求/ 目录，仅作历史归档
+restore_doc.py
+update_doc_v2.py
+
+# ---------- 工具与临时文件 ----------
+.tmp_extract/
+.tmp/
+.trae/
+.dsh-ops/
+.DS_Store
+Thumbs.db
+desktop.ini
+# Office 临时锁文件
+~$*
+*.swp
+*.log
+
+# ---------- 密钥（绝不提交） ----------
+.env
+.env.*
+*.key
+*.pem
+cloudfunctions/**/config.local.json
