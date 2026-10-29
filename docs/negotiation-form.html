@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>协商函 · 衣律通小程序原型</title>
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/tabbar.css">
+<link rel="stylesheet" href="css/shell.css">
+</head>
+<body>
+<div class="device">
+  <div class="device-screen">
+<div class="status-bar">
+  <span class="sb-time">9:41</span>
+  <span class="sb-right">
+    <span class="sb-signal"></span><span class="sb-wifi"></span><span class="sb-battery"></span>
+  </span>
+</div>
+
+    <div class="screen-scroll" id="screenScroll">
+<div class="page-scope scope-negotiation_form"><div class="container" style=""><div data-show="" data-document-type="negotiation_letter"></div><div class="fixed-header-wrapper" id="fixed-header"><div data-title="协商函生成" id="formHeader" data-showPlaceholder="false" data-background="var(--nav-bg)"></div><div class="steps-header" style="padding-top: 138px; padding-bottom: 0rpx;"><div class="step-item  current" data-data-step="0"><div class="step-circle">1</div><span class="step-title">当事人</span><div class="step-line"></div></div><div class="step-item  " data-data-step="1"><div class="step-circle">2</div><span class="step-title">法院</span><div class="step-line"></div></div><div class="step-item  " data-data-step="2"><div class="step-circle">3</div><span class="step-title">诉求</span><div class="step-line"></div></div><div class="step-item  " data-data-step="3"><div class="step-circle">4</div><span class="step-title">事实</span><div class="step-line"></div></div><div class="step-item  " data-data-step="4"><div class="step-circle">5</div><span class="step-title">预览</span></div></div></div><div class="form-content" style="padding-top: 173px; padding-bottom: calc(40rpx + 34px); min-height: 100vh; height: auto; overflow: visible;"><div><div class="form-section"><div class="section-title">发函方信息（我方）</div><div class="form-group"><span class="form-label">姓名</span><input class="form-input" id="input_sender_name" placeholder="请输入您的姓名" value="" data-data-field="sender.name"></input></div><div class="form-group"><span class="form-label">联系方式</span><input class="form-input" id="input_sender_contact" type="text" placeholder="请输入联系方式" value="" data-data-field="sender.contact"></input></div></div><div class="form-section"><div class="section-title">收函方信息（商家）</div><div class="form-group"><span class="form-label">电商平台名称</span><input class="form-input" id="input_receiver_platform" placeholder="如：淘宝、京东、拼多多" value="" data-data-field="receiver.platform"></input></div><div class="form-group"><span class="form-label">店铺名称</span><input class="form-input" id="input_receiver_shopname" placeholder="请输入店铺名称" value="" data-data-field="receiver.shopName"></input></div><div class="form-group"><span class="form-label">服装类型</span><div class="radio-group segmented" style="margin-bottom: 0;"><div class="segment-indicator segment-pos-0"></div><div class="radio-segment selected" data-data-value="false"><span class="radio-segment-text">非定制服装</span></div><div class="radio-segment " data-data-value="true"><span class="radio-segment-text">定制服装</span></div></div></div></div></div><div class="footer-actions"><button class="btn-primary">下一步</button></div></div></div></div>
+    </div>
+
+  </div>
+  <div class="home-bar"></div>
+</div>
+<aside class="proto-notes">
+  <h4>离线原型</h4>
+  <div class="kv"><span>页面</span><b>协商函</b></div>
+  <div class="kv"><span>尺寸</span><b>375 × 812</b></div>
+  <div class="kv"><span>数据</span><b>59 篇文章</b></div>
+  <div class="tip">由 WXML / WXSS 直接转换渲染。点击卡片可跳转。</div>
+</aside>
+<script src="_proto.js"></script>
+</body>
+</html>

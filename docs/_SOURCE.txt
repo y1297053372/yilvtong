@@ -1,0 +1,7 @@
+本目录是 prototype/ 的副本，仅用于 GitHub Pages 托管。
+
+GitHub Pages 只允许从仓库根目录（/）或 /docs 目录发布，
+因此把原型复制到这里。
+
+源目录：prototype/
+重新生成请改 prototype/，再同步过来。

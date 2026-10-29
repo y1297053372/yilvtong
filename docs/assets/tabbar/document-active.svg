@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48">
+  <mask id="mask-doc">
+    <rect width="100%" height="100%" fill="white"/>
+    <path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="black" d="M18 22h12M18 30h12M18 14h12"/>
+  </mask>
+  <path mask="url(#mask-doc)" stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#135bec" fill="#135bec" d="M10 6a2 2 0 0 1 2-2h24a2 2 0 0 1 2 2v38l-7-5-7 5-7-5-7 5V6Z" data-follow-fill="#135bec" data-follow-stroke="#135bec"/>
+</svg>

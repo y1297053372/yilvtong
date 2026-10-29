@@ -1,0 +1,281 @@
+/* ============================================================
+   离线原型基础样式
+   把微信小程序页面渲染结果装进一个"手机壳"里
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
+    "Segoe UI", Arial, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #eef1f6;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px 56px;
+  min-height: 100%;
+}
+
+/* ---------- 手机外壳 ---------- */
+.phone {
+  width: 375px;
+  min-height: 720px;
+  background: var(--page-bg, #f8fafc);
+  border-radius: 34px;
+  box-shadow: 0 12px 48px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.phone-notch {
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main, #1e293b);
+  background: var(--nav-bg, #fff);
+}
+
+.phone-notch .time { letter-spacing: 0.3px; }
+.phone-notch .icons { display: flex; gap: 5px; align-items: center; }
+.phone-notch .icons span {
+  display: inline-block;
+  width: 14px; height: 9px;
+  border: 1.4px solid currentColor;
+  border-radius: 2px;
+  opacity: .75;
+}
+
+/* 状态栏下方的标题栏 */
+.phone-header {
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main, #1e293b);
+  background: var(--nav-bg, #fff);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  position: relative;
+}
+
+.phone-header .back {
+  position: absolute;
+  left: 14px;
+  font-size: 18px;
+  color: var(--text-sub, #64748b);
+  cursor: pointer;
+  line-height: 1;
+  padding: 6px;
+}
+
+/* 内容区（可滚动） */
+.phone-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background: var(--page-bg, #f8fafc);
+}
+
+.phone-body::-webkit-scrollbar { width: 0; }
+
+/* 页面内容作用域容器 */
+.page-scope {
+  min-height: 100%;
+}
+
+/* ---------- 底部 TabBar ---------- */
+.tabbar {
+  flex-shrink: 0;
+  height: 56px;
+  display: flex;
+  background: var(--card-bg, #fff);
+  border-top: 1px solid var(--border-color, #e2e8f0);
+  padding-bottom: 4px;
+}
+
+.tabbar a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--text-sub, #94a3b8);
+  font-size: 10px;
+  transition: color .15s;
+}
+
+.tabbar a.active { color: #1152d4; font-weight: 600; }
+
+.tabbar .tab-ico {
+  width: 21px; height: 21px;
+  display: block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  opacity: .62;
+}
+
+.tabbar a.active .tab-ico { opacity: 1; }
+
+/* ---------- 说明面板 ---------- */
+.notes {
+  position: fixed;
+  right: 24px;
+  top: 28px;
+  width: 250px;
+  background: #fff;
+  border: 1px solid #dbe2ec;
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #475569;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, .07);
+  z-index: 50;
+}
+
+.notes h4 {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.notes .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+}
+.notes .row b { color: #1e293b; font-weight: 600; }
+.notes .hint {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #eef2f7;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+@media (max-width: 1180px) {
+  .notes { display: none; }
+}
+
+/* ---------- 小程序的图片占位 ---------- */
+img[data-fit] {
+  object-fit: cover;
+  display: block;
+}
+img[data-fit="contain"] { object-fit: contain; }
+img[data-fit="fill"] { object-fit: fill; }
+
+/* 缺图时显示占位底色，避免一片破图 */
+img:not([src]), img[src=""] {
+  background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+}
+
+/* ---------- 修正：小程序里 view 默认为块级 ---------- */
+div, span, img, input, textarea, button, a { box-sizing: border-box; }
+
+/* 页面切换遮罩层：小程序里用于掩盖安卓页面切换闪烁，
+   静态原型没有页面切换，这层会盖住全部内容，直接去掉 */
+.page-transition-mask {
+  display: none !important;
+}
+
+/* 磨砂背景层在小程序里是 fixed 的装饰，原型里限制在手机壳内 */
+.glass-background {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+/* 小程序大量使用 position:fixed 做悬浮元素（搜索框、回到顶部、底部操作栏）。
+   原型里这些元素要相对于手机壳定位，否则会跑到整个浏览器窗口。
+   这里统一把它们收进 .phone 的定位上下文。 */
+.phone {
+  position: relative;   /* 关键：给 fixed 子元素一个约束参照 */
+}
+
+/* 把页面内所有 fixed 元素改为 absolute，相对手机壳定位 */
+.page-scope [style*="position: fixed"],
+.page-scope .search-container-fixed,
+.page-scope .back-to-top,
+.page-scope .floating-buttons,
+.page-scope .bottom-bar,
+.page-scope .fixed-bottom,
+.page-scope .header-fixed,
+.page-scope .nav-fixed {
+  position: absolute !important;
+}
+
+/* 未知的 fixed 元素：用 JS 兜底（见 _fix.js），这里先处理常见几类 */
+.page-scope .search-container-fixed {
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
+.page-scope .back-to-top {
+  right: 14px;
+  bottom: 70px;
+}
+
+.page-scope .floating-buttons {
+  right: 14px;
+  bottom: 90px;
+}
+
+/* 表单页的固定头（含步骤条）在原型里参与文档流，
+   否则会吸附在手机壳顶部、把内容挤出去 */
+.fixed-header-wrapper,
+.steps-header {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+}
+
+input, textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+}
+
+/* 让 span 里的多行文本正常换行 */
+span { display: inline; }
+
+/* 修正 flex 容器中的文本省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

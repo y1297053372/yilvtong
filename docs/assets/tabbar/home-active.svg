@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48">
+  <mask id="mask-home">
+    <rect width="100%" height="100%" fill="white"/>
+    <path stroke-linejoin="round" stroke-width="4" stroke="black" fill="black" d="M19 29v13h10V29H19Z"/>
+  </mask>
+  <path mask="url(#mask-home)" stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#135bec" fill="#135bec" d="M9 18v24h30V18L24 6 9 18Z" data-follow-fill="#135bec" data-follow-stroke="#135bec"/>
+  <path stroke-linecap="round" stroke-width="4" stroke="#135bec" d="M9 42h30" data-follow-stroke="#135bec"/>
+</svg>
