@@ -193,3 +193,7 @@ body {
   letter-spacing: 0;
   transform: none;
 }
+
+/* Home 条与 TabBar 重叠：给有 TabBar 的页面留出底部安全区 */
+.device-tabbar { padding-bottom: 14px !important; height: 70px !important; }
+.device-tabbar .tab-bar { height: 56px !important; }
