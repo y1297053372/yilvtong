@@ -1,0 +1,188 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram name="第 1 页" id="mF_VDKdm5uwa_XAauoKg">
+    <mxGraphModel dx="1427" dy="1068" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="413" pageHeight="291" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="swimlane_user" parent="1" style="swimlane;horizontal=0;startSize=50;fillColor=#E3F2FD;strokeColor=#1976D2;fontStyle=1;fontSize=12;rotatable=0;gradientColor=none;" value="用户" vertex="1">
+          <mxGeometry height="120" width="1050" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="swimlane_platform" parent="1" style="swimlane;horizontal=0;startSize=50;fillColor=#FFF3E0;strokeColor=#F57C00;fontStyle=1;fontSize=12;rotatable=0;" value="“衣律通”平台" vertex="1">
+          <mxGeometry height="120" width="1050" x="40" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="swimlane_lawyer" parent="1" style="swimlane;horizontal=0;startSize=50;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontStyle=1;fontSize=12;rotatable=0;" value="律师" vertex="1">
+          <mxGeometry height="120" width="1050" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="swimlane_student" parent="swimlane_lawyer" style="swimlane;horizontal=0;startSize=50;fillColor=#E8F5E9;strokeColor=#388E3C;fontStyle=1;fontSize=12;rotatable=0;" value="法学生" vertex="1">
+          <mxGeometry height="120" width="1050" y="-120" as="geometry" />
+        </mxCell>
+        <mxCell id="user_register" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="注册" vertex="1">
+          <mxGeometry height="40" width="70" x="80" y="-320" as="geometry" />
+        </mxCell>
+        <mxCell id="user_free" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="阅览文章" vertex="1">
+          <mxGeometry height="40" width="80" x="200" y="-320" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-7" edge="1" parent="swimlane_lawyer" source="user_paid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" target="user_delegate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-8" edge="1" parent="swimlane_lawyer" source="user_paid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" target="eKpmzbBlvojeg2fhO2Nl-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-31" connectable="0" parent="eKpmzbBlvojeg2fhO2Nl-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="若有&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;代&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;理需求&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.8428" y="-1" as="geometry">
+            <mxPoint x="23" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="user_paid" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="生成法律文书" vertex="1">
+          <mxGeometry height="40" width="80" x="330" y="-320" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-43" edge="1" parent="swimlane_lawyer" source="user_delegate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="580" y="-200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="user_delegate" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;div&gt;律师&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;代理申请&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="470" y="-350" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_1" edge="1" parent="swimlane_lawyer" source="user_register" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="user_free">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_2" edge="1" parent="swimlane_lawyer" source="user_free" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="user_paid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-14" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="eKpmzbBlvojeg2fhO2Nl-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-6" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;法学生代理申请&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="470" y="-290" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-11" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="案件解决" vertex="1">
+          <mxGeometry height="40" width="80" x="610" y="-320" as="geometry" />
+        </mxCell>
+        <mxCell id="platform_knowledge" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="提供知识库" vertex="1">
+          <mxGeometry height="40" width="80" x="200" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="platform_fee" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;文书生成功能&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="330" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-22" edge="1" parent="swimlane_lawyer" source="platform_assign" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="eKpmzbBlvojeg2fhO2Nl-20" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="platform_assign" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="代理平台分配" vertex="1">
+          <mxGeometry height="40" width="80" x="540" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_platform_1" edge="1" parent="swimlane_lawyer" source="platform_knowledge" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="platform_fee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_platform_2" edge="1" parent="swimlane_lawyer" source="platform_fee" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="platform_assign">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-20" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;平台抽成&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="670" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-15" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="评价订单" vertex="1">
+          <mxGeometry height="40" width="80" x="800" y="-320" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-23" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="提醒用户评价" vertex="1">
+          <mxGeometry height="40" width="80" x="800" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-24" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="eKpmzbBlvojeg2fhO2Nl-15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lawyer_fee" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;缴纳月费&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="410" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="student_consult" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#333333;fontSize=11;" value="提供免费咨询" vertex="1">
+          <mxGeometry height="40" width="80" x="540" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="student_case" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="代理案件" vertex="1">
+          <mxGeometry height="40" width="80" x="670" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_student_1" edge="1" parent="swimlane_lawyer" source="student_consult" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="student_case">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-37" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="eKpmzbBlvojeg2fhO2Nl-27" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-40" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-25" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;" target="eKpmzbBlvojeg2fhO2Nl-28">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1019.41" y="-180" />
+              <mxPoint x="1019.41" y="60" />
+            </Array>
+            <mxPoint x="1019.41" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-25" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="根据情况判定" vertex="1">
+          <mxGeometry height="40" width="80" x="909.41" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-27" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;法学生赔偿&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="909.41" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-28" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;律师赔偿&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="909.41" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_lawyer_1" edge="1" parent="swimlane_lawyer" source="lawyer_fee" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="lawyer_consult">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lawyer_consult" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="&lt;b&gt;提供简单咨询&lt;/b&gt;&lt;div&gt;&lt;b&gt;（9.9元/次）&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="540" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_lawyer_2" edge="1" parent="swimlane_lawyer" source="lawyer_consult" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="lawyer_case">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lawyer_case" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;" value="承接案件" vertex="1">
+          <mxGeometry height="40" width="80" x="670" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_lawyer_3" edge="1" parent="swimlane_lawyer" source="lawyer_case" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="lawyer_income">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="student_income" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" value="获得代理费" vertex="1">
+          <mxGeometry height="40" width="80" x="800" y="-80" as="geometry" />
+        </mxCell>
+        <mxCell id="lawyer_income" parent="swimlane_lawyer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" value="获得律师费" vertex="1">
+          <mxGeometry height="40" width="80" x="800" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_student_2" edge="1" parent="swimlane_lawyer" source="student_case" style="endArrow=block;html=1;strokeColor=#333333;endFill=1;" target="student_income">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-1" edge="1" parent="swimlane_lawyer" source="platform_knowledge" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="user_free" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-2" edge="1" parent="swimlane_lawyer" source="platform_fee" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="user_paid" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-18" edge="1" parent="swimlane_lawyer" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="platform_assign" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="580" y="-270" as="sourcePoint" />
+            <mxPoint x="620" y="-280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-35" edge="1" parent="swimlane_lawyer" source="platform_assign" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="student_consult" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-16" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="eKpmzbBlvojeg2fhO2Nl-15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-26" edge="1" parent="swimlane_lawyer" source="eKpmzbBlvojeg2fhO2Nl-15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;" target="eKpmzbBlvojeg2fhO2Nl-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-29" connectable="0" parent="eKpmzbBlvojeg2fhO2Nl-26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="用户投诉" vertex="1">
+          <mxGeometry relative="1" x="-0.7116" y="-2" as="geometry">
+            <mxPoint x="5" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eKpmzbBlvojeg2fhO2Nl-42" edge="1" parent="swimlane_lawyer" source="platform_assign" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;" target="lawyer_consult">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="-120" />
+              <mxPoint x="510" y="-120" />
+              <mxPoint x="510" />
+              <mxPoint x="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
