@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "民事起诉状生成",
+  "navigationStyle": "custom",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "sub-header": "/components/sub-header/sub-header",
+    "privacy-consent": "/components/privacy-consent/privacy-consent"
+  }
+}

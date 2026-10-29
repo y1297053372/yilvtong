@@ -1,0 +1,136 @@
+<view class="container">
+  <!-- 页面切换遮罩层 - 解决安卓闪烁问题 -->
+  <view class="page-transition-mask {{isDarkMode ? 'dark' : 'light'}}" animation="{{maskAnimation}}" hidden="{{maskHidden}}"></view>
+
+  <custom-header pageName="我的" noPlaceholder="true"></custom-header>
+  
+  <scroll-view scroll-y class="scroll-container tabbar-safe-area" enhanced show-scrollbar="{{false}}" bounces>
+    <!-- 顶部背景 (放在 scroll-view 内部作为第一个元素) -->
+    <view class="profile-bg"></view>
+
+    <!-- 顶部占位，确保内容不被导航栏遮挡 -->
+    <view style="height: {{navBarHeight + 20}}px; width: 100%;"></view>
+
+  <!-- 1. 用户信息区域 (居中布局) -->
+  <view class="user-header">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <block wx:if="{{hasUserInfo && userInfo.avatarUrl}}">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      </block>
+      <block wx:else>
+        <view class="avatar-placeholder">
+          <!-- Logo icon inside placeholder -->
+          <image class="avatar-icon" src="/images/tabbar/profile.svg" style="width: 80rpx; height: 80rpx; opacity: 0.5;"></image>
+        </view>
+      </block>
+    </button>
+    
+    <view class="nickname-box">
+      <block wx:if="{{!hasUserInfo}}">
+        <text class="nickname-text">点击头像设置昵称</text>
+      </block>
+      <block wx:else>
+        <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{userInfo.nickName}}" bindblur="onNicknameChange" bindinput="onNicknameInput"/>
+      </block>
+    </view>
+  </view>
+
+  <!-- 2. 功能卡片区 (双卡片) -->
+  <view class="grid-card-section">
+    <!-- 我的收藏 -->
+    <view class="grid-card" bindtap="handleMenuClick" data-item="{{menuItems[0]}}">
+      <view class="card-icon-wrapper">
+        <image class="grid-icon icon-blue" src="/images/icons/bookmark.svg" mode="aspectFit"></image>
+      </view>
+      <view class="card-badge" wx:if="{{favoritesCount > 0}}">{{favoritesCount}}</view>
+      <view class="card-text">
+        <text class="card-title">我的收藏</text>
+        <text class="card-subtitle">已收藏的案例</text>
+      </view>
+    </view>
+
+    <!-- 我的文书 -->
+    <view class="grid-card" bindtap="handleMenuClick" data-item="{{menuItems[2]}}">
+      <view class="card-icon-wrapper">
+        <image class="grid-icon icon-blue" src="/images/icons/document.svg" mode="aspectFit"></image>
+      </view>
+      <view class="card-badge" wx:if="{{documentsCount > 0}}">{{documentsCount}}</view>
+      <view class="card-text">
+        <view class="card-title">我的文书</view>
+        <view class="card-subtitle">最近生成的文档</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 3. 维权代理 Banner 卡片 -->
+  <view class="banner-section">
+    <view class="banner-card" bindtap="handleMenuClick" data-item="{{menuItems[3]}}">
+      <view class="banner-content">
+        <view class="banner-header">
+          <view class="banner-icon-box">
+             <image class="banner-icon" src="/images/icons/lawyer_green.svg" mode="aspectFit"></image>
+          </view>
+          <text class="banner-title">维权代理</text>
+        </view>
+        <view class="banner-desc">
+          <text>专业律师团队全程协助</text>
+          <text>高效保障您的合法权益</text>
+        </view>
+      </view>
+      <view class="banner-action">
+        <text class="action-text">立即申请</text>
+        <image class="action-arrow" src="/images/icons/arrow_right_gray.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 4. 列表菜单区 (独立卡片) -->
+  <view class="menu-section">
+    <!-- 浏览足迹 -->
+    <view class="menu-card" bindtap="handleMenuClick" data-item="{{menuItems[1]}}">
+      <view class="menu-left">
+        <view class="menu-icon-box blue">
+          <image class="menu-icon icon-blue" src="/images/icons/history.svg" mode="aspectFit"></image>
+        </view>
+        <text class="menu-text">浏览足迹</text>
+      </view>
+      <image class="arrow-right" src="/images/icons/arrow_right_gray.svg"></image>
+    </view>
+
+    <!-- 用户须知 -->
+    <view class="menu-card" bindtap="handleMenuClick" data-item="{{menuItems[4]}}">
+      <view class="menu-left">
+        <view class="menu-icon-box orange">
+          <image class="menu-icon icon-orange" src="/images/icons/shield.svg" mode="aspectFit"></image>
+        </view>
+        <text class="menu-text">用户须知</text>
+      </view>
+      <image class="arrow-right" src="/images/icons/arrow_right_gray.svg"></image>
+    </view>
+
+    <!-- 联系客服 - 使用微信官方客服 -->
+    <button class="menu-card contact-service-btn" open-type="contact">
+      <view class="menu-left">
+        <view class="menu-icon-box pink">
+          <image class="menu-icon icon-pink" src="/images/icons/service.svg" mode="aspectFit"></image>
+        </view>
+        <text class="menu-text">联系客服</text>
+      </view>
+      <image class="arrow-right" src="/images/icons/arrow_right_gray.svg"></image>
+    </button>
+  </view>
+  
+  <!-- 退出登录 -->
+  <view class="menu-section" style="margin-top: 32rpx;">
+    <view class="menu-card logout-btn" bindtap="onLogout">
+      <text class="logout-text">退出登录</text>
+    </view>
+  </view>
+  
+  <view class="footer-version">
+    <text>衣律通 V1.0.0</text>
+  </view>
+  
+  <!-- Padding handled by .tabbar-safe-area class -->
+    </scroll-view>
+</view>

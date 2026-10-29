@@ -1,0 +1,127 @@
+/* ========================================
+   Custom Tab Bar - No Animation
+   ======================================== */
+
+/* CSS Variables */
+.tab-bar {
+  --primary-color: #1152d4;
+  --text-default: #94a3b8;
+  --text-active: #1152d4;
+  --bg-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-color: #ffffff;
+  --active-shadow: rgba(17, 82, 212, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab-bar {
+    --primary-color: #3b82f6;
+    --text-default: #94a3b8;
+    --text-active: #60a5fa;
+    --bg-color: #1e1e1e;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --border-color: #1e1e1e;
+    --active-shadow: rgba(59, 130, 246, 0.4);
+  }
+}
+
+/* Container */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 160rpx;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Background Bar */
+.tab-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-color);
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  box-shadow: 0 -4rpx 20rpx var(--shadow-color);
+  pointer-events: auto;
+  z-index: 0;
+}
+
+/* Tab Item */
+.tab-bar-item {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* Icon Wrapper */
+.icon-wrapper {
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 6rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: transparent;
+  border: 8rpx solid transparent;
+  box-sizing: content-box;
+}
+
+/* Active Icon Wrapper */
+.tab-bar-item.active .icon-wrapper {
+  width: 100rpx;
+  height: 100rpx;
+  background: var(--primary-color);
+  border-color: var(--border-color);
+  box-shadow: 0 12rpx 30rpx var(--active-shadow); /* Enhanced shadow */
+  transform: translateY(-40rpx); /* Increased lift for more protrusion */
+  z-index: 2;
+}
+
+/* Icons */
+.tab-bar-icon {
+  width: 48rpx;
+  height: 48rpx;
+  display: block;
+}
+
+.tab-bar-item.active .tab-bar-icon {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.icon-active {
+  filter: brightness(0) invert(1);
+}
+
+/* Text */
+.tab-bar-text {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--text-default);
+  margin-top: 4rpx;
+}
+
+.tab-bar-item.active .tab-bar-text {
+  color: var(--text-active);
+  font-weight: 600;
+  font-size: 24rpx; 
+  margin-top: -20rpx; /* Adjusted to balance higher lift */
+}

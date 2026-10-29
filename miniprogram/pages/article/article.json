@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "文章详情",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "sub-header": "/components/sub-header/sub-header",
+    "mp-html": "/components/mp-html/dist/mp-weixin/index"
+  }
+}

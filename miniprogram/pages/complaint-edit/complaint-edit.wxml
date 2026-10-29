@@ -1,0 +1,24 @@
+<view class="edit-container">
+  <view class="edit-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>取消</text>
+    </view>
+    <view class="edit-title">编辑文书</view>
+    <view class="save-btn" bindtap="saveAndBack">
+      <text>保存</text>
+    </view>
+  </view>
+
+  <view class="edit-content">
+    <textarea
+      class="edit-textarea"
+      value="{{bodyText}}"
+      bindinput="onTextInput"
+      maxlength="-1"
+      placeholder="请输入内容"
+      cursor-spacing="20"
+      show-confirm-bar="{{false}}"
+      adjust-position="{{true}}"
+    />
+  </view>
+</view>

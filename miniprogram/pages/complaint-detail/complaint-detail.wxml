@@ -1,0 +1,77 @@
+<view class="container">
+  <sub-header title="起诉状详情" back="{{true}}"></sub-header>
+
+  <view class="content-wrapper" wx:if="{{!isEditing}}">
+    <!-- Static Centered Title -->
+    <view class="doc-title">民事起诉状</view>
+
+    <!-- Read-Only View -->
+    <text
+      class="detail-text-view"
+      user-select="{{true}}"
+    >{{bodyText}}</text>
+
+    <!-- Static Footer for Alignment -->
+    <view class="doc-footer">
+        <view class="footer-court">此致</view>
+        <view class="footer-court-name">{{formData.courtName || '________人民法院'}}</view>
+
+        <view class="footer-signature-block">
+            <view class="footer-row">
+                <text class="footer-label">具状人：</text>
+                <text class="footer-value">___________</text>
+            </view>
+            <view class="footer-row">
+                <text class="footer-date">{{todayDate}}</text>
+            </view>
+        </view>
+    </view>
+
+    <!-- Bottom Warning -->
+    <view class="bottom-warning">
+        <text user-select="{{true}}">本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。建议用户在正式提交前请专业人士复核。</text>
+    </view>
+  </view>
+
+  <!-- Edit Mode Full Screen -->
+  <view class="edit-wrapper" wx:if="{{isEditing}}">
+    <editor
+      id="editor"
+      class="full-screen-editor"
+      placeholder="请输入内容"
+      bindready="onEditorReady"
+      bindinput="onEditorInput"
+    />
+  </view>
+
+  <!-- Floating Action Buttons -->
+  <view class="floating-buttons" wx:if="{{!isEditing}}">
+    <view class="fab-btn copy-btn" bindtap="copyText">
+      <image class="fab-icon" src="/images/icons/copy.svg" mode="aspectFit"></image>
+    </view>
+    <view class="fab-btn edit-btn" bindtap="startEditing">
+      <image class="fab-icon" src="/images/icons/edit.svg" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- Bottom Action Bar - AI Polish -->
+  <view class="bottom-bar" wx:if="{{!isEditing}}">
+      <view class="action-btn {{isPolished ? 'success' : 'primary'}} full-width" bindtap="handleAIButtonTap">
+        <block wx:if="{{isGeneratingAI}}">
+            <view class="loading-spinner"></view>
+            <text>AI 润色中...</text>
+        </block>
+        <block wx:else>
+            <image class="btn-icon" src="/images/icons/bulb.svg" mode="aspectFit"></image>
+            <text>{{isPolished ? '已完成 AI 润色' : 'AI 智能润色'}}</text>
+        </block>
+      </view>
+  </view>
+
+  <!-- Edit Mode Toolbar (Only Save Button) -->
+  <view class="editor-toolbar" wx:if="{{isEditing}}">
+    <view class="toolbar-btn save-btn" bindtap="saveEditing">
+      <text>保存</text>
+    </view>
+  </view>
+</view>

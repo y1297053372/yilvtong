@@ -1,0 +1,47 @@
+<view class="container">
+  <sub-header title="搜索结果"></sub-header>
+  
+  <view class="results-area">
+    <view class="sort-bar">
+      <!-- Background Slider Indicator -->
+      <view class="active-indicator pos-{{currentSort}}"></view>
+      
+      <view class="sort-item {{currentSort === 'comprehensive' ? 'active' : ''}}" bindtap="onSortTap" data-sort="comprehensive">综合排序</view>
+      <view class="sort-item {{currentSort === 'newest' ? 'active' : ''}}" bindtap="onSortTap" data-sort="newest">最新发布</view>
+      <view class="sort-item {{currentSort === 'most_viewed' ? 'active' : ''}}" bindtap="onSortTap" data-sort="most_viewed">最多浏览</view>
+    </view>
+    
+    <view class="article-list">
+      <view class="limited-tip" wx:if="{{showLimitedTip && currentSort === 'comprehensive'}}">
+        <text>{{limitHint || '综合排序仅展示部分结果，如需更多请使用其他排序方式'}}</text>
+      </view>
+      <view class="article-card" wx:for="{{searchResults}}" wx:key="id" bindtap="onResultTap" data-id="{{item.id}}">
+        <!-- Image Section -->
+        <image src="{{item.image}}" mode="aspectFill" class="article-image" lazy-load="{{true}}"/>
+        
+        <!-- Info Section -->
+        <view class="article-info">
+          <view class="article-meta">
+            <text class="meta-tag">{{item.category}}</text>
+            <text class="meta-date">{{item.date}}</text>
+          </view>
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-summary">{{item.summary}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="loading-container" wx:if="{{loading}}">
+      <view class="loading-spinner"></view>
+    </view>
+
+    <view class="empty-tip" wx:if="{{!loading && searchResults.length === 0}}">
+      <text>未找到相关内容</text>
+    </view>
+  </view>
+
+  <!-- Back To Top -->
+  <view class="back-to-top {{showBackTop ? 'show' : ''}}" bindtap="onBackToTop">
+    <image class="arrow-up" src="/images/icons/top.svg" mode="aspectFit"></image>
+  </view>
+</view>

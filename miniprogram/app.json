@@ -1,0 +1,59 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/search/search",
+    "pages/list/list",
+    "pages/article/article",
+    "pages/knowledge/knowledge",
+    "pages/document/document",
+    "pages/complaint-form/complaint-form",
+    "pages/complaint-detail/complaint-detail",
+    "pages/complaint-edit/complaint-edit",
+    "pages/report-form/report-form",
+    "pages/report-detail/report-detail",
+    "pages/negotiation-form/negotiation-form",
+    "pages/negotiation-detail/negotiation-detail",
+    "pages/agency/agency",
+    "pages/profile/profile",
+    "pages/my-documents/my-documents",
+    "pages/document-article/document-article"
+  ],
+  "window": {
+    "backgroundTextStyle": "@backgroundTextStyle",
+    "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
+    "navigationBarTitleText": "衣律通",
+    "navigationBarTextStyle": "@navigationBarTextStyle"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#94a3b8",
+    "selectedColor": "#1152d4",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/document/document",
+        "text": "文书生成",
+        "iconPath": "images/tabbar/document.png",
+        "selectedIconPath": "images/tabbar/document-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tabbar/profile.png",
+        "selectedIconPath": "images/tabbar/profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "darkmode": true,
+  "themeLocation": "theme.json",
+  "lazyCodeLoading": "requiredComponents",
+  "componentFramework": "glass-easel"
+}

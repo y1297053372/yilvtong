@@ -1,0 +1,122 @@
+<view class="container">
+  <sub-header title="维权代理" background="var(--page-bg)"></sub-header>
+
+  <scroll-view scroll-y class="scroll-container" enhanced show-scrollbar="{{false}}" bounces>
+    <view class="content-wrapper">
+      <view class="header-section">
+        <text class="header-title">专业维权代理服务</text>
+        <text class="header-desc">根据您的案件情况，选择合适的代理类型</text>
+      </view>
+
+      <view class="agency-cards">
+        <view class="agency-card student-card" bindtap="onStudentCardTap">
+          <view class="card-decoration">
+            <view class="deco-circle deco-1"></view>
+            <view class="deco-circle deco-2"></view>
+          </view>
+          <view class="card-main">
+            <view class="card-header">
+              <view class="icon-container">
+                <image class="card-icon" src="/images/icons/students.svg" mode="aspectFit"></image>
+              </view>
+              <view class="title-area">
+                <text class="card-title">法学生代理</text>
+                <text class="card-tag">小额维权首选</text>
+              </view>
+            </view>
+            <view class="card-body">
+              <text class="card-desc">适合小额简单案件，性价比高，响应快速</text>
+              <view class="feature-tags">
+                <text class="feature-tag">经济实惠</text>
+                <text class="feature-tag">专业培训</text>
+                <text class="feature-tag">律师督导</text>
+              </view>
+            </view>
+            <view class="card-footer">
+              <view class="action-btn">
+                <text class="btn-text">立即咨询</text>
+                <image class="btn-arrow" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="agency-card lawyer-card" bindtap="onLawyerCardTap">
+          <view class="card-decoration">
+            <view class="deco-circle deco-1"></view>
+            <view class="deco-circle deco-2"></view>
+          </view>
+          <view class="card-main">
+            <view class="card-header">
+              <view class="icon-container">
+                <image class="card-icon" src="/images/icons/lawyer.svg" mode="aspectFit"></image>
+              </view>
+              <view class="title-area">
+                <text class="card-title">律师代理</text>
+                <text class="card-tag">大额维权保障</text>
+              </view>
+            </view>
+            <view class="card-body">
+              <text class="card-desc">适合涉案金额较大或复杂的案件，全程专业护航</text>
+              <view class="feature-tags">
+                <text class="feature-tag">执业律师</text>
+                <text class="feature-tag">全程服务</text>
+                <text class="feature-tag">诉讼代理</text>
+              </view>
+            </view>
+            <view class="card-footer">
+              <view class="action-btn">
+                <text class="btn-text">立即咨询</text>
+                <image class="btn-arrow" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="qa-section">
+        <view class="qa-header">
+          <view class="qa-header-icon">
+            <image class="qa-icon" src="/images/icons/bulb.svg" mode="aspectFit"></image>
+          </view>
+          <view class="qa-header-text">
+            <text class="qa-title">维权代理功能介绍</text>
+            <text class="qa-subtitle">了解更多服务详情</text>
+          </view>
+        </view>
+
+        <view class="qa-list">
+          <view class="qa-category" wx:for="{{qaData}}" wx:key="category" wx:for-item="category">
+            <view class="category-header {{category.expanded ? 'expanded' : ''}}" bindtap="onCategoryTap" data-index="{{index}}">
+              <view class="category-left">
+                <view class="category-icon-box">
+                  <text class="category-icon-text">{{index + 1}}</text>
+                </view>
+                <text class="category-title">{{category.category}}</text>
+              </view>
+              <view class="category-arrow-box">
+                <image class="category-arrow {{category.expanded ? 'expanded' : ''}}" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+              </view>
+            </view>
+            
+            <view class="qa-items {{category.expanded ? 'expanded' : ''}}">
+              <view class="qa-item" wx:for="{{category.items}}" wx:key="question" wx:for-index="qaIndex" wx:for-item="qa">
+                <view class="qa-question" bindtap="onQATap" data-category-index="{{index}}" data-qa-index="{{qaIndex}}">
+                  <view class="question-badge">Q{{qa.id}}</view>
+                  <text class="question-text">{{qa.question}}</text>
+                  <image class="qa-arrow {{qa.expanded ? 'expanded' : ''}}" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+                </view>
+                <view class="qa-answer {{qa.expanded ? 'expanded' : ''}}">
+                  <view class="answer-content">
+                    <text class="answer-label">解答</text>
+                    <text class="answer-text">{{qa.answer}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

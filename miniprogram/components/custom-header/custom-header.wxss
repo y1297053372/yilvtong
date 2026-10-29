@@ -1,0 +1,98 @@
+/* components/custom-header/custom-header.wxss */
+.custom-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999; /* 提高层级，防止被覆盖 */
+  background-color: var(--glass-bg) !important; /* 降低不透明度，更通透 */
+  backdrop-filter: blur(20px); /* 增强高斯模糊 */
+  -webkit-backdrop-filter: blur(20px); /* 兼容 iOS */
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  /* 移除阴影，以便与下方的搜索框融为一体 */
+  box-shadow: none;
+  border-bottom: 1rpx solid var(--glass-border);
+}
+
+.custom-header.transparent {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-box {
+  width: 36px;
+  height: 36px;
+  background-color: var(--primary-color) !important; /* 主题色背景 */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(17, 82, 212, 0.3);
+  overflow: hidden; /* 配合 drop-shadow 方案 */
+}
+
+.logo-image {
+  width: 20px;
+  height: 20px;
+  /* 使用 filter 将图标变为白色 */
+  filter: brightness(0) invert(1);
+}
+
+/* 移除之前的媒体查询限制，改为统一规则 */
+/* @media (prefers-color-scheme: dark) ... */
+/* .custom-header.transparent .logo-image ... */
+
+.brand-text-area {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap; /* Prevent wrapping */
+  flex-wrap: nowrap;
+}
+
+.brand-name {
+  font-size: 17px;
+  font-weight: bold;
+  color: var(--text-main);
+  line-height: 1;
+  display: block;
+  flex-shrink: 0; /* Prevent text from shrinking/wrapping */
+}
+
+.brand-divider {
+  width: 1px;
+  height: 14px;
+  background-color: var(--border-color);
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.page-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-sub);
+  line-height: 1;
+  display: block;
+  flex-shrink: 0;
+}
+
+.header-placeholder {
+  width: 100%;
+}

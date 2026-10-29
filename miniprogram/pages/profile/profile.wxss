@@ -1,0 +1,423 @@
+/* pages/profile/profile.wxss */
+page {
+  background-color: var(--page-bg);
+}
+
+.container {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 滚动容器 */
+.scroll-container {
+  height: 100vh;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* 隐藏 WebKit 滚动条 */
+.scroll-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* 顶部背景装饰 - 减小高度 */
+.profile-bg {
+  position: static;
+  width: 100%;
+  height: 20rpx;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+/* 1. 用户信息区域 */
+.user-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0;
+  margin-bottom: 40rpx;
+  /* 顶部间距由 WXML 中的占位 view 控制 */
+  margin-top: 0;
+}
+
+.avatar-wrapper {
+  padding: 0;
+  width: 160rpx !important;
+  height: 160rpx !important;
+  border-radius: 50%;
+  margin: 0 !important;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 6rpx solid var(--card-bg);
+  /* 增强的环形阴影 */
+  box-shadow: 0 8rpx 30rpx rgba(17, 82, 212, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.avatar-wrapper::after {
+  border: none;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-placeholder image {
+  width: 80rpx;
+  height: 80rpx;
+  opacity: 0.5;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.nickname-box {
+  margin-top: 24rpx;
+  text-align: center;
+}
+
+.nickname-text {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.nickname-input {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: center;
+  height: 60rpx;
+  min-width: 200rpx;
+}
+
+/* 2. 功能卡片区 (双卡片) */
+.grid-card-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.grid-card {
+  width: 48%;
+  background: var(--card-bg);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* 普通阴影 */
+  box-shadow: var(--shadow-md);
+}
+
+.card-icon-wrapper {
+  margin-bottom: 24rpx;
+  width: 64rpx;
+  height: 64rpx;
+  background-color: transparent; /* 移除图标背景 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 图标左对齐 */
+  overflow: hidden; /* 关键：隐藏移出视野的原始黑色图标 */
+}
+
+.grid-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+/* 图标着色：黑色 SVG 转彩色 */
+.icon-blue {
+  filter: invert(48%) sepia(76%) saturate(2030%) hue-rotate(197deg) brightness(95%) contrast(101%);
+}
+
+.icon-orange {
+  filter: invert(54%) sepia(91%) saturate(2164%) hue-rotate(360deg) brightness(101%) contrast(97%);
+}
+
+.icon-pink {
+  filter: invert(35%) sepia(85%) saturate(2000%) hue-rotate(290deg) brightness(95%) contrast(95%);
+}
+
+.icon-green {
+  filter: invert(53%) sepia(64%) saturate(608%) hue-rotate(88deg) brightness(96%) contrast(91%);
+}
+
+.icon-red {
+  filter: invert(32%) sepia(95%) saturate(2320%) hue-rotate(340deg) brightness(95%) contrast(105%);
+}
+
+.icon-purple {
+  filter: invert(30%) sepia(85%) saturate(1500%) hue-rotate(250deg) brightness(95%) contrast(105%);
+}
+
+/* 移除旧的 filter 样式 */
+/* @media (prefers-color-scheme: dark) ... */
+
+.card-title {
+  display: block;
+  font-size: 32rpx; /* 稍微调小一点，适配简洁风格 */
+  font-weight: 700;
+  color: var(--text-main); /* 深色文字 */
+  margin-bottom: 8rpx;
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: var(--text-sub); /* 灰色文字 */
+}
+
+.card-badge {
+  position: absolute;
+  top: 32rpx;
+  right: 32rpx;
+  background-color: var(--tag-bg); /* 浅蓝底 */
+  color: var(--tag-text); /* 蓝字 */
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 3. 维权代理 Banner */
+.banner-section {
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.banner-card {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 32rpx;
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* 进一步增强阴影效果 */
+  box-shadow: 0 20rpx 50rpx rgba(37, 99, 235, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 装饰圆圈 */
+.banner-card::after {
+  content: '';
+  position: absolute;
+  right: -20rpx;
+  bottom: -40rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.banner-icon-box {
+  width: 64rpx;
+  height: 64rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20rpx;
+  overflow: hidden; /* 用于图标染色 */
+}
+
+.banner-icon {
+  width: 32rpx;
+  height: 32rpx;
+  filter: brightness(0) invert(1); /* 将图标变为白色 */
+}
+
+.banner-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.banner-desc {
+  display: flex;
+  flex-direction: column;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.banner-action {
+  background: #ffffff;
+  padding: 12rpx 24rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* 隐藏溢出的原始图标 */
+}
+
+.action-text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #2563eb;
+  margin-right: 8rpx;
+}
+
+.action-arrow {
+  width: 24rpx;
+  height: 24rpx;
+  opacity: 0.6;
+}
+
+/* 4. 列表菜单区 */
+.menu-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 32rpx;
+}
+
+.menu-card {
+  background: var(--card-bg);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+}
+
+/* 修复 button 样式 */
+button.menu-card {
+  width: 100%;
+  font-weight: normal;
+  line-height: normal;
+  text-align: left;
+  border: none;
+}
+
+button.menu-card::after {
+  border: none;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon-box {
+  width: 64rpx; /* 调整为 64rpx */
+  height: 64rpx;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 24rpx;
+  overflow: hidden;
+}
+
+.menu-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.menu-icon-box.blue { background-color: var(--blue-bg); }
+.menu-icon-box.green { background-color: var(--green-bg); }
+.menu-icon-box.orange { background-color: var(--orange-bg); }
+.menu-icon-box.pink { background-color: var(--pink-bg); }
+
+/* 其他样式保持 */
+/* .card-badge 已在上方重定义 */
+/* .card-title 已在上方重定义 */
+/* .card-subtitle 已在上方重定义 */
+
+.menu-text {
+  font-size: 34rpx; /* 稍微加大至 34rpx */
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.arrow-right {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.3;
+}
+
+.footer-version {
+  text-align: center;
+  margin-top: 60rpx;
+  font-size: 24rpx;
+  color: var(--text-placeholder);
+}
+
+/* 退出登录按钮 - 胶囊型浅红色背景 */
+.logout-btn {
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 100rpx;
+  padding: 24rpx 160rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 24rpx auto;
+  width: fit-content;
+}
+
+.logout-text {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #ef4444;
+}
+
+/* 联系客服按钮样式 - 与普通菜单卡片保持一致 */
+.contact-service-btn {
+  background: var(--card-bg);
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.contact-service-btn::after {
+  border: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .arrow-right {
+    filter: invert(1);
+    opacity: 0.5;
+  }
+}

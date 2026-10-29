@@ -1,0 +1,11 @@
+<view class="sub-header" style="height: {{navBarHeight}}px; background-color: {{background || 'var(--nav-bg, #ffffff)'}};">
+  <view class="header-content" style="margin-top: {{statusBarHeight}}px; height: {{contentHeight}}px;">
+    <view class="left-area" bindtap="onBackTap">
+      <image class="back-icon" src="/images/icons/back.svg" mode="aspectFit"></image>
+    </view>
+    <view class="title-area">
+      <text class="page-title">{{title}}</text>
+    </view>
+  </view>
+</view>
+<view class="header-placeholder" style="height: {{navBarHeight}}px;" wx:if="{{showPlaceholder}}"></view>

@@ -1,0 +1,56 @@
+<view class="container">
+  <sub-header title="文章详情"></sub-header>
+  
+  <scroll-view scroll-y class="scroll-container" enhanced show-scrollbar="{{false}}" bounces bindscroll="onScroll">
+  <view class="content-wrapper" wx:if="{{article}}">
+    <!-- Header Section -->
+    <view class="article-header">
+      <text class="title">{{article.title}}</text>
+      <view class="meta-row">
+        <!-- 1. 分类 -->
+        <text class="meta-category {{article.categoryClass}}">{{article.category}}</text>
+        
+        <!-- 分隔符 -->
+        <view class="meta-divider"></view>
+        
+        <!-- 2. 日期 -->
+        <text class="meta-date">{{article.date}}</text>
+        
+        <!-- 分隔符 -->
+        <view class="meta-divider"></view>
+        
+        <!-- 3. 浏览量 -->
+        <view class="meta-views">
+          <text>{{article.views}} 浏览</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Content Section -->
+    <view class="article-body">
+      <!-- 使用 mp-html 渲染富文本 -->
+      <mp-html 
+        wx:if="{{article.content}}"
+        content="{{article.content}}" 
+        tag-style="{{tagStyle}}"
+      />
+    </view>
+
+  </view>
+
+  <!-- Floating Action Buttons -->
+  <view class="floating-buttons">
+    <view class="fab-btn collect-btn {{isCollected ? 'active' : ''}}" bindtap="onCollectTap">
+      <image class="fab-icon" src="/images/icons/topic.svg" mode="aspectFit"></image>
+    </view>
+    <button class="fab-btn share-btn" open-type="share">
+      <image class="fab-icon" src="/images/icons/share.svg" mode="aspectFit"></image>
+    </button>
+  </view>
+
+  <!-- Back To Top -->
+  <view class="back-to-top {{showBackTop ? 'show' : ''}}" bindtap="onBackToTop">
+    <image class="arrow-up" src="/images/icons/top.svg" mode="aspectFit"></image>
+  </view>
+  </scroll-view>
+</view>

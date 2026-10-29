@@ -1,0 +1,99 @@
+<view class="privacy-modal" wx:if="{{show}}" catchtouchmove="preventTouchMove">
+  <view class="privacy-mask" catchtouchmove="preventTouchMove"></view>
+  <view class="privacy-content" catchtouchmove="preventTouchMove">
+    <view class="privacy-title">{{config.title}}</view>
+    
+    <view class="privacy-description">{{config.description}}</view>
+    
+    <view class="privacy-section">
+      <view class="section-title">必填信息</view>
+      <view class="required-fields-grid">
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>姓名</text>
+        </view>
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>性别</text>
+        </view>
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>民族</text>
+        </view>
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>出生日期</text>
+        </view>
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>联系电话</text>
+        </view>
+        <view class="required-field-item">
+          <image class="check-icon" src="/images/icons/check-blue.svg" mode="aspectFit"/>
+          <text>联系地址</text>
+        </view>
+      </view>
+      <view class="section-note">说明：{{config.legalBasis}}</view>
+    </view>
+    
+    <view class="privacy-section" wx:if="{{!config.noIdCard}}">
+      <view class="section-title">身份证号码</view>
+      <view class="section-note" style="border-top: none; padding-top: 0; margin-bottom: 24rpx;">身份证号码为敏感个人信息，我们将：</view>
+      
+      <view class="security-features">
+        <view class="security-item">
+          <view class="security-icon">
+            <image src="/images/icons/lock.svg" mode="aspectFit"/>
+          </view>
+          <view class="security-content">
+            <view class="security-title">加密存储</view>
+            <view class="security-desc">采取高级别安全加密，不明文保存</view>
+          </view>
+        </view>
+        
+        <view class="security-item">
+          <view class="security-icon">
+            <image src="/images/icons/eye-slash.svg" mode="aspectFit"/>
+          </view>
+          <view class="security-content">
+            <view class="security-title">脱敏展示</view>
+            <view class="security-desc">仅显示身份证首位和末位</view>
+          </view>
+        </view>
+        
+        <view class="security-item">
+          <view class="security-icon">
+            <image src="/images/icons/file-shield.svg" mode="aspectFit"/>
+          </view>
+          <view class="security-content">
+            <view class="security-title">专用用途</view>
+            <view class="security-desc">仅用于生成法律文书，不作其他用途</view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="choice-note">
+        您可以选择是否提供身份证号码：如同意提供，身份证号将作为必填项；如不同意，您仍可使用文书生成功能。
+      </view>
+    </view>
+    
+    <view class="privacy-checkbox">
+      <checkbox-group bindchange="onAgreeChange">
+        <label class="checkbox-label">
+          <checkbox value="agreed" checked="{{agreed}}" color="#2c5ccf"/>
+          <text>我已阅读并同意</text>
+        </label>
+      </checkbox-group>
+      <text class="link" bindtap="onOpenPrivacyPolicy">《隐私保护指引》</text>
+    </view>
+    
+    <view class="privacy-buttons">
+      <button class="btn-primary" bindtap="onConsentIdCard" wx:if="{{!config.noIdCard}}" disabled="{{!agreed}}">
+        同意提供身份证号
+      </button>
+      <button class="btn-secondary" bindtap="onDeclineIdCard">
+        {{config.noIdCard ? '同意并继续' : '暂不提供，直接生成'}}
+      </button>
+    </view>
+  </view>
+</view>

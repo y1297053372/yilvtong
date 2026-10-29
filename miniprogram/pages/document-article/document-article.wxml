@@ -1,0 +1,31 @@
+<view class="container">
+  <sub-header title="文章详情" background="var(--page-bg)"></sub-header>
+  
+  <scroll-view scroll-y class="scroll-container" enhanced show-scrollbar="{{false}}" bounces>
+    <view class="content-wrapper" wx:if="{{article}}">
+      <view class="article-header">
+        <text class="title">{{article.title}}</text>
+      </view>
+      
+      <view class="article-body">
+        <mp-html 
+          wx:if="{{article.content}}"
+          content="{{article.content}}" 
+          tag-style="{{tagStyle}}"
+          bindimageload="onImageLoad"
+          bindtap="onHtmlTap"
+        />
+      </view>
+    </view>
+    
+    <view class="loading-container" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+    
+    <view class="error-container" wx:if="{{error}}">
+      <text>{{error}}</text>
+    </view>
+    
+    <view style="height: 40rpx;"></view>
+  </scroll-view>
+</view>

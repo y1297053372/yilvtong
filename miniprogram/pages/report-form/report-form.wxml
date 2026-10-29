@@ -1,0 +1,454 @@
+<wxs module="tools">
+  module.exports.includes = function(arr, item) {
+    return arr.indexOf(item) > -1;
+  }
+</wxs>
+
+<view class="container" style="{{pageScrollDisabled ? 'overflow: hidden; height: 100vh;' : ''}}">
+  <!-- Privacy Consent Modal -->
+  <privacy-consent 
+    show="{{showPrivacyModal}}" 
+    document-type="report_letter" 
+    bind:consent="onPrivacyConsent"
+    bind:showChange="onPrivacyShowChange"
+  />
+  
+  <view class="fixed-header-wrapper" id="fixed-header">
+    <sub-header title="举报文书生成" id="formHeader" showPlaceholder="{{false}}" background="var(--nav-bg)"></sub-header>
+    
+    <view class="steps-header" style="padding-top: {{headerHeight - 20}}px; padding-bottom: 0rpx;">
+      <view class="step-item {{index < currentStep ? 'completed' : ''}} {{index === currentStep ? 'current' : ''}}" wx:for="{{steps}}" wx:key="index" bindtap="jumpToStep" data-step="{{index}}">
+        <view class="step-circle">{{index + 1}}</view>
+        <text class="step-title">{{item.title}}</text>
+        <view class="step-line" wx:if="{{index < steps.length - 1}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="form-content" style="padding-top: {{totalHeaderHeight - 5}}px; padding-bottom: calc({{currentStep === 4 ? '0' : '40'}}rpx + {{paddingBottom}}px); min-height: 100vh; height: {{currentStep === 4 ? '100vh' : 'auto'}}; overflow: {{currentStep === 4 ? 'hidden' : 'visible'}};">
+    
+    <!-- Step 0: 类型选择 + 收发方信息 -->
+    <view wx:if="{{currentStep === 0}}">
+      <!-- 文书类型选择 -->
+      <view class="form-section">
+        <view class="section-title">文书类型</view>
+        <view class="radio-group list">
+          <view class="radio-list-card {{formData.documentType === 'letter' ? 'selected' : ''}}" 
+                bindtap="onDocumentTypeChange" data-value="letter">
+            <view class="radio-list-radio"></view>
+            <view class="radio-list-content">
+              <text class="radio-list-title">举报信（邮件）</text>
+              <text class="radio-list-desc">生成完整举报信，可导出PDF提交至市场监督管理部门</text>
+            </view>
+          </view>
+          <view class="radio-list-card {{formData.documentType === 'online' ? 'selected' : ''}}" 
+                bindtap="onDocumentTypeChange" data-value="online">
+            <view class="radio-list-radio"></view>
+            <view class="radio-list-content">
+              <text class="radio-list-title">线上举报文本</text>
+              <text class="radio-list-desc">生成简洁文本，适用于线上举报平台提交</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 服装类型选择（线上举报文本显示） -->
+      <view class="form-section" wx:if="{{formData.documentType === 'online'}}">
+        <view class="section-title">服装类型</view>
+        <view class="form-group">
+          <view class="radio-group segmented">
+            <view class="segment-indicator segment-pos-{{formData.productType === 'custom' ? 1 : 0}}"></view>
+            <view class="radio-segment {{formData.productType === 'non_custom' ? 'selected' : ''}}" bindtap="onProductTypeChange" data-value="non_custom">
+              <text class="radio-segment-text">非定制服装</text>
+            </view>
+            <view class="radio-segment {{formData.productType === 'custom' ? 'selected' : ''}}" bindtap="onProductTypeChange" data-value="custom">
+              <text class="radio-segment-text">定制服装</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 举报方信息（仅举报信显示） -->
+      <view class="form-section" wx:if="{{formData.documentType === 'letter'}}">
+        <view class="section-title">举报方信息（本人）</view>
+        <view class="form-group">
+          <text class="form-label">您的身份</text>
+          <view class="radio-group segmented">
+            <view class="segment-indicator segment-pos-{{formData.identityType === 'merchant' ? 1 : 0}}"></view>
+            <view class="radio-segment {{formData.identityType === 'consumer' ? 'selected' : ''}}" bindtap="onIdentityTypeChange" data-value="consumer">
+              <text class="radio-segment-text">消费者</text>
+            </view>
+            <view class="radio-segment {{formData.identityType === 'merchant' ? 'selected' : ''}}" bindtap="onIdentityTypeChange" data-value="merchant">
+              <text class="radio-segment-text">商家</text>
+            </view>
+          </view>
+        </view>
+        <view class="form-group">
+          <text class="form-label">姓名</text>
+          <input class="form-input" id="input_reporter_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入您的姓名" value="{{formData.reporter.name}}" data-field="reporter.name" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">联系电话</text>
+          <input class="form-input" id="input_reporter_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="text" placeholder="请输入联系电话" value="{{formData.reporter.phone}}" data-field="reporter.phone" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">通信地址（选填）</text>
+          <input class="form-input" id="input_reporter_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入通信地址" value="{{formData.reporter.address}}" data-field="reporter.address" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">服装类型</text>
+          <view class="radio-group segmented">
+            <view class="segment-indicator segment-pos-{{formData.productType === 'custom' ? 1 : 0}}"></view>
+            <view class="radio-segment {{formData.productType === 'non_custom' ? 'selected' : ''}}" bindtap="onProductTypeChange" data-value="non_custom">
+              <text class="radio-segment-text">非定制服装</text>
+            </view>
+            <view class="radio-segment {{formData.productType === 'custom' ? 'selected' : ''}}" bindtap="onProductTypeChange" data-value="custom">
+              <text class="radio-segment-text">定制服装</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 被举报方信息（仅举报信显示） -->
+      <view class="form-section" wx:if="{{formData.documentType === 'letter'}}">
+        <view class="section-title">被举报方信息（商家）</view>
+        <view class="form-group">
+          <text class="form-label">店铺名称</text>
+          <input class="form-input" id="input_merchant_shopname" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入店铺名称" value="{{formData.merchant.shopName}}" data-field="merchant.shopName" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">经营者/法人代表姓名（选填）</text>
+          <input class="form-input" id="input_merchant_operator" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入经营者姓名" value="{{formData.merchant.operatorName}}" data-field="merchant.operatorName" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">企业注册号（选填）</text>
+          <input class="form-input" id="input_merchant_regno" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入企业注册号" value="{{formData.merchant.registrationNo}}" data-field="merchant.registrationNo" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">统一社会信用代码（选填）</text>
+          <input class="form-input" id="input_merchant_creditcode" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入统一社会信用代码" value="{{formData.merchant.creditCode}}" data-field="merchant.creditCode" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">店铺注册地址/住所</text>
+          <input class="form-input" id="input_merchant_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入店铺地址" value="{{formData.merchant.address}}" data-field="merchant.address" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 1: 交易详情 -->
+    <view wx:if="{{currentStep === 1}}">
+      <view class="form-section">
+        <view class="section-title">交易详情</view>
+        <view class="form-group">
+          <text class="form-label">商品名称</text>
+          <input class="form-input" id="input_product_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入商品名称" value="{{formData.transaction.productName}}" data-field="transaction.productName" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">订单编号</text>
+          <input class="form-input" id="input_order_id" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入订单编号" value="{{formData.transaction.orderId}}" data-field="transaction.orderId" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">支付金额（元）</text>
+          <input class="form-input" id="input_amount" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="请输入支付金额" value="{{formData.transaction.amount}}" data-field="transaction.amount" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">下单日期</text>
+          <picker mode="date" value="{{formData.transaction.orderDate}}" bindchange="onDateChange" data-field="transaction.orderDate">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{formData.transaction.orderDate}}">{{formData.transaction.orderDate}}</text>
+              <text class="picker-placeholder" wx:else>请选择下单日期</text>
+              <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">发货日期</text>
+          <picker mode="date" value="{{formData.transaction.shipDate}}" bindchange="onDateChange" data-field="transaction.shipDate">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{formData.transaction.shipDate}}">{{formData.transaction.shipDate}}</text>
+              <text class="picker-placeholder" wx:else>请选择发货日期</text>
+              <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">签收日期</text>
+          <picker mode="date" value="{{formData.transaction.receiveDate}}" bindchange="onDateChange" data-field="transaction.receiveDate">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{formData.transaction.receiveDate}}">{{formData.transaction.receiveDate}}</text>
+              <text class="picker-placeholder" wx:else>请选择签收日期</text>
+              <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 损失情况 -->
+      <view class="form-section">
+        <view class="section-title">损失情况</view>
+        <view class="form-group">
+          <text class="form-label">直接经济损失（元）</text>
+          <input class="form-input" id="input_direct_loss" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="即购衣付款金额" value="{{formData.loss.directLoss}}" data-field="loss.directLoss" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">是否有间接损失</text>
+          <view class="radio-group segmented">
+            <view class="segment-indicator segment-pos-{{formData.loss.hasIndirectLoss ? 1 : 0}}"></view>
+            <view class="radio-segment {{!formData.loss.hasIndirectLoss ? 'selected' : ''}}" bindtap="onHasIndirectLossChange" data-value="false">
+              <text class="radio-segment-text">无</text>
+            </view>
+            <view class="radio-segment {{formData.loss.hasIndirectLoss ? 'selected' : ''}}" bindtap="onHasIndirectLossChange" data-value="true">
+              <text class="radio-segment-text">有</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{formData.loss.hasIndirectLoss}}">
+          <view class="form-group">
+            <text class="form-label">间接损失类型</text>
+            <input class="form-input" id="input_indirect_desc" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：运费/定制设计费/维权费用等" value="{{formData.loss.indirectLossDesc}}" data-field="loss.indirectLossDesc" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">间接损失金额（元）</text>
+            <input class="form-input" id="input_indirect_amount" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="请输入间接损失金额" value="{{formData.loss.indirectLossAmount}}" data-field="loss.indirectLossAmount" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 2: 侵权事实 + 维权沟通 -->
+    <view wx:if="{{currentStep === 2}}">
+      <!-- 侵权事实 -->
+      <view class="form-section">
+        <view class="section-title" style="justify-content: space-between;">
+          <text>侵权事实（可多选）</text>
+          <view class="selected-count" wx:if="{{formData.infringement.items.length > 0}}">
+            已选 {{formData.infringement.items.length}} 项
+          </view>
+        </view>
+        <view class="form-group">
+          <view class="radio-group list">
+            <view class="selection-header {{tools.includes(formData.infringement.items, item.id) ? 'selected' : ''}}" 
+                   wx:for="{{formData.productType === 'custom' ? customInfringementOptions : nonCustomInfringementOptions}}" wx:key="id"
+                   bindtap="onInfringementItemTap" data-id="{{item.id}}">
+              <view class="checkbox-list-check"></view>
+              <view class="selection-content">
+                <text class="checkbox-list-text">{{item.label}}</text>
+                <text class="selection-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="form-group">
+          <text class="form-label">具体问题描述</text>
+          <input class="form-input" id="input_infringement_desc" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请详细描述商品存在的问题" value="{{formData.infringement.description}}" data-field="infringement.description" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+      </view>
+
+      <!-- 维权前置沟通 -->
+      <view class="form-section">
+        <view class="section-title">维权前置沟通</view>
+        <view class="form-group">
+          <text class="form-label">沟通日期</text>
+          <picker mode="date" value="{{formData.communication.date}}" bindchange="onDateChange" data-field="communication.date">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{formData.communication.date}}">{{formData.communication.date}}</text>
+              <text class="picker-placeholder" wx:else>请选择沟通日期</text>
+              <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">商家回应</text>
+          <input class="form-input" id="input_comm_response" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：拒不承认/拖延处理/无理拒绝退款等" value="{{formData.communication.response}}" data-field="communication.response" bindinput="handleInput" cursor-spacing="30"/>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 3: 举报诉求 -->
+    <view wx:if="{{currentStep === 3}}">
+      <view class="form-section">
+        <view class="section-title" style="justify-content: space-between;">
+          <text>举报诉求（可多选）</text>
+          <view class="selected-count" wx:if="{{formData.claims.length > 0}}">
+            已选 {{formData.claims.length}} 项
+          </view>
+        </view>
+        <view class="radio-group list">
+          <block wx:for="{{reportClaimOptions}}" wx:key="id">
+            <view class="selection-header {{tools.includes(formData.claims, item.id) ? 'selected' : ''}} {{item.hasInput ? 'has-sub' : ''}}"
+                  bindtap="onClaimItemTap" data-id="{{item.id}}">
+              <view class="checkbox-list-check"></view>
+              <text class="checkbox-list-text">{{item.label}}</text>
+            </view>
+            
+            <view class="sub-input-container" wx:if="{{tools.includes(formData.claims, item.id) && item.hasInput}}">
+              <view class="sub-input-group">
+                <view class="label-row">
+                  <text class="sub-input-label">{{item.inputLabel}}</text>
+                </view>
+                <view class="sub-input-box">
+                  <view class="sub-input-icon-box">
+                    <image class="sub-input-icon-img" src="/images/icons/money.svg" mode="aspectFit"/>
+                  </view>
+                  <input class="sub-input" id="input_claim_{{item.id}}_1" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="{{item.inputPlaceholder}}" value="{{formData.claimInputs[item.id + '_1']}}" data-id="{{item.id}}" bindinput="onClaimInput" cursor-spacing="30"/>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 4: 生成结果 -->
+    <view wx:if="{{currentStep === 4}}" style="height: 100%; display: flex; flex-direction: column;">
+      <view class="form-section transparent-section" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 0;">
+        <view class="section-title" style="display: flex; justify-content: space-between; align-items: center; padding-left: 24rpx; flex-shrink: 0;">
+          <text>生成结果预览</text>
+        </view>
+
+        <view class="preview-box" bindtap="viewFullDocument" style="flex: 1; height: 0; overflow: hidden;" data-testid="preview-box">
+          <view class="preview-mask">
+             <text class="preview-mask-text">点击查看完整文书</text>
+          </view>
+          <view class="preview-doc-title">{{formData.documentType === 'letter' ? '举报信' : '举报文本'}}</view>
+          <text class="result-text-partial">{{generatedText}}</text>
+        </view>
+
+        <view class="bottom-area" style="flex-shrink: 0; padding-bottom: 40rpx;">
+            <view class="btn-group" style="margin-top: 24rpx; display: flex; flex-direction: column; gap: 20rpx;">
+              <view style="display: flex; gap: 20rpx;">
+                <button class="btn-secondary" bindtap="prevStep" style="width: auto; flex: 1;">上一步</button>
+                <button class="btn-secondary" bindtap="showEvidenceModal" style="width: auto; flex: 1;">查看证据清单</button>
+              </view>
+              <button class="btn-primary" bindtap="{{formData.documentType === 'letter' ? 'exportPDF' : 'copyText'}}" style="width: 100%; {{formData.documentType === 'letter' ? 'background: linear-gradient(135deg, #2B32B2 0%, #1488CC 100%);' : ''}}">
+                {{formData.documentType === 'letter' ? '导出PDF' : '复制举报文本'}}
+              </button>
+            </view>
+
+            <view class="bottom-warning">
+                <text>本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。建议用户在正式提交前请专业人士复核。</text>
+            </view>
+        </view>
+
+      </view>
+    </view>
+
+    <!-- Evidence Modal -->
+    <view class="modal-mask" wx:if="{{showEvidenceModal}}" bindtap="hideEvidenceModal"></view>
+    <view class="modal-container evidence-modal" wx:if="{{showEvidenceModal}}">
+      <view class="modal-header">
+        <view class="modal-title-wrapper">
+          <image class="modal-icon-bulb" src="/images/icons/bulb.svg" mode="aspectFit"></image>
+          <text class="modal-title">证据清单</text>
+        </view>
+        <view class="modal-close" bindtap="hideEvidenceModal">×</view>
+      </view>
+      
+      <scroll-view scroll-y class="modal-content">
+        <view class="evidence-group">
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">平台订单截图、支付凭证截图。</text>
+          </view>
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">商家商品宣传页面截图（含材质/尺寸/定制要求等核心承诺）。</text>
+          </view>
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">本人与商家的沟通记录截图（微信/平台客服/旺旺等）。</text>
+          </view>
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">商品实物照片/视频（清晰展示侵权问题）。</text>
+          </view>
+          <view class="evidence-check-item" wx:if="{{formData.productType === 'custom'}}">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">定制需求确认记录、设计稿沟通记录。</text>
+          </view>
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">物流签收凭证、运费支付凭证、商品检测凭证（如有）。</text>
+          </view>
+          <view class="evidence-check-item">
+            <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+            <text class="check-text">其他相关证据。</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="modal-footer-placeholder"></view>
+    </view>
+    
+    <!-- Signature Modal -->
+    <view class="modal-mask" wx:if="{{showSignatureModal}}" bindtap="hideSignatureModal"></view>
+    <view class="modal-container" wx:if="{{showSignatureModal}}">
+      <view class="modal-header">
+        <view class="modal-title-wrapper">
+          <image class="modal-icon-warning" src="/images/icons/edit.svg" mode="aspectFit"></image>
+          <text class="modal-title">签名提示</text>
+        </view>
+        <view class="modal-close" bindtap="hideSignatureModal">×</view>
+      </view>
+      
+      <view class="modal-content">
+        <view class="signature-tips">
+          <view class="tip-item">
+            <text class="tip-number">1</text>
+            <text class="tip-text">打印生成的举报信</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-number">2</text>
+            <text class="tip-text">在"举报人"处签名或盖章</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-number">3</text>
+            <text class="tip-text">也可按手印确认</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-primary {{isGeneratingPDF ? 'loading' : ''}}" bindtap="openGeneratedPDF" disabled="{{isGeneratingPDF}}">
+          <view wx:if="{{isGeneratingPDF}}" class="btn-loading-icon"></view>
+          <text>{{isGeneratingPDF ? '正在生成PDF...' : '查看PDF'}}</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- Disclaimer Modal -->
+    <view class="modal-mask" wx:if="{{showDisclaimerModal}}"></view>
+    <view class="modal-container" wx:if="{{showDisclaimerModal}}">
+      <view class="modal-header">
+        <view class="modal-title-wrapper">
+          <image class="modal-icon-warning" src="/images/icons/warning.svg" mode="aspectFit"></image>
+          <text class="modal-title">法律风险提示</text>
+        </view>
+        <view class="modal-close" bindtap="closeDisclaimerModal">×</view>
+      </view>
+      
+      <view class="modal-content">
+        <view class="warning-text-box">
+          <text>本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。</text>
+        </view>
+        
+        <view class="checkbox-container" bindtap="toggleDisclaimerCheckbox">
+          <view class="checkbox {{disclaimerAccepted ? 'checked' : ''}}">
+            <view class="checkmark" wx:if="{{disclaimerAccepted}}"></view>
+          </view>
+          <text class="checkbox-label">我已阅读并理解以上提示</text>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-primary" disabled="{{!disclaimerAccepted}}" bindtap="confirmDisclaimer">继续生成</button>
+      </view>
+    </view>
+
+    <view class="footer-actions" wx:if="{{currentStep < 4}}">
+      <button class="btn-secondary" bindtap="prevStep" wx:if="{{currentStep > 0}}">上一步</button>
+      <button class="btn-primary" bindtap="nextStep" wx:if="{{currentStep < 3}}">下一步</button>
+      <button class="btn-primary" bindtap="nextStep" wx:if="{{currentStep === 3}}">生成文书</button>
+    </view>
+
+  </view>
+</view>

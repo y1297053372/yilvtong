@@ -1,0 +1,161 @@
+<view class="container">
+  <sub-header title="我的文书" background="var(--page-bg)"></sub-header>
+
+  <!-- 内容区域 -->
+  <view class="content-wrapper">
+    <!-- 类型切换Tab栏 -->
+    <view class="tab-bar">
+      <view class="active-indicator pos-{{currentTab}}"></view>
+      <view class="tab-item {{currentTab === 'civil_complaint' ? 'active' : ''}}" bindtap="onTabTap" data-tab="civil_complaint">
+        起诉状
+      </view>
+      <view class="tab-item {{currentTab === 'report_letter' ? 'active' : ''}}" bindtap="onTabTap" data-tab="report_letter">
+        举报文书
+      </view>
+      <view class="tab-item {{currentTab === 'negotiation_letter' ? 'active' : ''}}" bindtap="onTabTap" data-tab="negotiation_letter">
+        协商函
+      </view>
+    </view>
+
+    <!-- 卡片加载状态 -->
+    <view class="loading-container" wx:if="{{isLoading}}">
+      <image class="loading-spinner" src="/images/icons/loading.svg" mode="aspectFit"></image>
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:elif="{{totalCount === 0}}">
+      <image class="empty-img" src="/images/tabbar/document.svg" mode="aspectFit"></image>
+      <text class="empty-title">暂无文书</text>
+      <text class="empty-desc">去生成您的第一份法律文书</text>
+      <view class="empty-action" bindtap="navigateToGenerate">立即生成</view>
+    </view>
+
+    <!-- 卡片列表 -->
+    <scroll-view wx:else scroll-y class="scroll-container" enhanced show-scrollbar="{{false}}" bounces>
+      <!-- 民事起诉状列表 -->
+      <view class="document-list" wx:if="{{currentTab === 'civil_complaint'}}">
+        <view class="doc-card {{item.status === 'draft' ? 'draft' : ''}}" wx:for="{{civilComplaints}}" wx:key="id" bindtap="viewDocument" bindlongpress="onLongPress" data-item="{{item}}">
+          <!-- 卡片头部：标题和状态 -->
+          <view class="doc-header">
+            <text class="doc-title">{{item.defendantName || '未填写被告'}}</text>
+            <!-- 状态标签：草稿显示蓝色草稿，已完成显示绿色已完成 -->
+            <view class="doc-status {{item.status === 'draft' ? 'status-draft' : 'status-completed'}}">
+              <text class="status-text">{{item.status === 'draft' ? '草稿' : '已完成'}}</text>
+            </view>
+          </view>
+          <!-- 卡片内容：案由和诉请 -->
+          <view class="doc-body" wx:if="{{item.caseReason || item.claimsSummary}}">
+            <view class="doc-info-row" wx:if="{{item.caseReason}}">
+              <text class="doc-label">案由：</text>
+              <text class="doc-value">{{item.caseReason}}</text>
+            </view>
+            <view class="doc-info-row" wx:if="{{item.claimsSummary}}">
+              <text class="doc-label">诉请：</text>
+              <text class="doc-value">{{item.claimsSummary}}</text>
+            </view>
+          </view>
+          <!-- 卡片底部：时间和箭头 -->
+          <view class="doc-footer">
+            <view class="doc-time">
+              <image class="time-icon" src="/images/icons/clock.svg" mode="aspectFit"></image>
+              <text class="doc-meta">{{item.formattedTime}}</text>
+            </view>
+            <image class="arrow-right" src="/images/icons/arrow_right_gray.svg" mode="aspectFit"></image>
+          </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view class="tab-empty-state" wx:if="{{civilComplaints.length === 0}}">
+          <image class="tab-empty-img" src="/images/icons/card-civil.svg" mode="aspectFit"></image>
+          <text class="tab-empty-text">暂无民事起诉状</text>
+          <text class="tab-empty-subtext">点击生成您的第一份起诉状</text>
+          <view class="tab-empty-action" bindtap="navigateToCivilComplaint">立即生成</view>
+        </view>
+      </view>
+
+      <!-- 举报文书列表 -->
+      <view class="document-list" wx:if="{{currentTab === 'report_letter'}}">
+        <view class="doc-card {{item.status === 'draft' ? 'draft' : ''}}" wx:for="{{reportLetters}}" wx:key="id" bindtap="viewDocument" bindlongpress="onLongPress" data-item="{{item}}">
+          <!-- 卡片头部：标题和状态 -->
+          <view class="doc-header">
+            <text class="doc-title">{{item.defendantName || '未填写商家'}}</text>
+            <view class="doc-status {{item.status === 'draft' ? 'status-draft' : 'status-completed'}}">
+              <text class="status-text">{{item.status === 'draft' ? '草稿' : '已完成'}}</text>
+            </view>
+          </view>
+          <!-- 卡片内容：侵权事实和举报诉求 -->
+          <view class="doc-body" wx:if="{{item.caseReason || item.claimsSummary}}">
+            <view class="doc-info-row" wx:if="{{item.caseReason}}">
+              <text class="doc-label">侵权事实：</text>
+              <text class="doc-value">{{item.caseReason}}</text>
+            </view>
+            <view class="doc-info-row" wx:if="{{item.claimsSummary}}">
+              <text class="doc-label">举报诉求：</text>
+              <text class="doc-value">{{item.claimsSummary}}</text>
+            </view>
+          </view>
+          <!-- 卡片底部：时间和箭头 -->
+          <view class="doc-footer">
+            <view class="doc-time">
+              <image class="time-icon" src="/images/icons/clock.svg" mode="aspectFit"></image>
+              <text class="doc-meta">{{item.formattedTime}}</text>
+            </view>
+            <image class="arrow-right" src="/images/icons/arrow_right_gray.svg" mode="aspectFit"></image>
+          </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view class="tab-empty-state" wx:if="{{reportLetters.length === 0}}">
+          <image class="tab-empty-img" src="/images/icons/card-complaint.svg" mode="aspectFit"></image>
+          <text class="tab-empty-text">暂无举报文书</text>
+          <text class="tab-empty-subtext">去生成您的第一份举报文书</text>
+          <view class="tab-empty-action" bindtap="navigateToReport">立即生成</view>
+        </view>
+      </view>
+
+      <!-- 协商函列表 -->
+      <view class="document-list" wx:if="{{currentTab === 'negotiation_letter'}}">
+        <view class="doc-card {{item.status === 'draft' ? 'draft' : ''}}" wx:for="{{negotiationLetters}}" wx:key="id" bindtap="viewDocument" bindlongpress="onLongPress" data-item="{{item}}">
+          <!-- 卡片头部：标题和状态 -->
+          <view class="doc-header">
+            <text class="doc-title">{{item.defendantName || '未填写商家'}}</text>
+            <view class="doc-status {{item.status === 'draft' ? 'status-draft' : 'status-completed'}}">
+              <text class="status-text">{{item.status === 'draft' ? '草稿' : '已完成'}}</text>
+            </view>
+          </view>
+          <!-- 卡片内容：侵权类型和协商诉求 -->
+          <view class="doc-body" wx:if="{{item.caseReason || item.claimsSummary}}">
+            <view class="doc-info-row" wx:if="{{item.caseReason}}">
+              <text class="doc-label">侵权类型：</text>
+              <text class="doc-value">{{item.caseReason}}</text>
+            </view>
+            <view class="doc-info-row" wx:if="{{item.claimsSummary}}">
+              <text class="doc-label">协商诉求：</text>
+              <text class="doc-value">{{item.claimsSummary}}</text>
+            </view>
+          </view>
+          <!-- 卡片底部：时间和箭头 -->
+          <view class="doc-footer">
+            <view class="doc-time">
+              <image class="time-icon" src="/images/icons/clock.svg" mode="aspectFit"></image>
+              <text class="doc-meta">{{item.formattedTime}}</text>
+            </view>
+            <image class="arrow-right" src="/images/icons/arrow_right_gray.svg" mode="aspectFit"></image>
+          </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view class="tab-empty-state" wx:if="{{negotiationLetters.length === 0}}">
+          <image class="tab-empty-img" src="/images/icons/card-negotiation.svg" mode="aspectFit"></image>
+          <text class="tab-empty-text">暂无协商函</text>
+          <text class="tab-empty-subtext">去生成您的第一份协商函</text>
+          <view class="tab-empty-action" bindtap="navigateToNegotiation">立即生成</view>
+        </view>
+      </view>
+
+      <!-- 底部安全区域 -->
+      <view class="bottom-safe-area"></view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,65 @@
+.sub-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--nav-bg, #ffffff); /* Fallback to white */
+}
+
+@media (prefers-color-scheme: dark) {
+  .sub-header {
+    background-color: var(--nav-bg, #191919); /* Fallback to dark */
+  }
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.left-area {
+  position: absolute;
+  left: 16px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Increase hit area */
+  z-index: 10;
+}
+
+.back-icon {
+  width: 24px;
+  height: 24px;
+  /* 适配深色模式图标颜色，反转黑色图标为白色 */
+  filter: var(--icon-filter, none);
+}
+
+@media (prefers-color-scheme: dark) {
+  .back-icon {
+    filter: invert(1);
+  }
+}
+
+.title-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.page-title {
+  font-size: 17px;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.header-placeholder {
+  width: 100%;
+}

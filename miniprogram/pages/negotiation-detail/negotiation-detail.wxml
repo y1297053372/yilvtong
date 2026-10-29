@@ -1,0 +1,53 @@
+<view class="container">
+  <sub-header title="协商函详情" back="{{true}}"></sub-header>
+
+  <view class="content-wrapper" wx:if="{{!isEditing}}">
+    <!-- Static Centered Title -->
+    <view class="doc-title">协商函</view>
+
+    <!-- Read-Only View -->
+    <text class="detail-text-view" user-select="{{true}}">{{mainContent}}</text>
+
+    <!-- Static Footer -->
+    <view class="signature-block">
+      <text class="signature-line" user-select="{{true}}">发函方签字/盖章：___________</text>
+      <text class="date-line" user-select="{{true}}">{{dateStr}}</text>
+    </view>
+
+    <!-- Bottom Warning -->
+    <view class="bottom-warning">
+        <text>本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。建议用户在正式提交前请专业人士复核。</text>
+    </view>
+  </view>
+
+  <!-- Edit Mode Full Screen -->
+  <view class="edit-wrapper" wx:if="{{isEditing}}">
+    <editor
+      id="editor"
+      class="full-screen-editor"
+      placeholder="请输入内容"
+      bindready="onEditorReady"
+      bindinput="onEditorInput"
+      show-img-size="{{false}}"
+      show-img-toolbar="{{false}}"
+      show-img-resize="{{false}}"
+    />
+  </view>
+
+  <!-- Floating Action Buttons -->
+  <view class="floating-buttons" wx:if="{{!isEditing}}">
+    <view class="fab-btn copy-btn" bindtap="copyText">
+      <image class="fab-icon" src="/images/icons/copy.svg" mode="aspectFit"></image>
+    </view>
+    <view class="fab-btn edit-btn" bindtap="startEditing">
+      <image class="fab-icon" src="/images/icons/edit.svg" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- Edit Mode Toolbar (Only Save Button) -->
+  <view class="editor-toolbar" wx:if="{{isEditing}}">
+    <view class="toolbar-btn save-btn" bindtap="saveEditing">
+      <text>保存</text>
+    </view>
+  </view>
+</view>

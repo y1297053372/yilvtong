@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "衣律通",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-header": "/components/custom-header/custom-header"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "举报文书详情",
+  "navigationStyle": "custom",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "sub-header": "/components/sub-header/sub-header"
+  }
+}

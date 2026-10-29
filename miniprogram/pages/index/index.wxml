@@ -1,0 +1,141 @@
+<view class="page">
+  <!-- 页面切换遮罩层 - 解决安卓闪烁问题 -->
+  <view class="page-transition-mask {{isDarkMode ? 'dark' : 'light'}}" animation="{{maskAnimation}}" hidden="{{maskHidden}}"></view>
+
+  <!-- 统一的磨砂玻璃背景层 -->
+  <view class="glass-background" style="height: {{navBarHeight + 68}}px;"></view>
+
+  <!-- 自定义顶部导航栏 (透明背景) -->
+  <custom-header pageName="首页" transparent="true" noPlaceholder="true"></custom-header>
+  
+  <!-- 搜索框容器 (固定在顶部，位于Header下方，透明背景) -->
+  <view class="search-container-fixed" style="top: {{navBarHeight}}px;">
+    <view class="search-box" bindtap="onSearchTap">
+      <image class="search-icon" src="/images/icons/search.svg" mode="aspectFit"></image>
+      <input 
+        class="search-input" 
+        placeholder="搜索法条、案例或律师..." 
+        value="{{keyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+        focus="{{isSearchFocus}}"
+      />
+      <icon wx:if="{{keyword}}" type="clear" size="16" color="#cbd5e1" catchtap="onClearInput" style="padding: 8px;"/>
+      <text wx:if="{{isSearchActive}}" class="cancel-text" catchtap="onSearchCancel">取消</text>
+    </view>
+  </view>
+
+  <!-- 内容滚动区域：包含占位符和核心内容 -->
+  <!-- 内容滚动区域 -->
+  <scroll-view 
+    scroll-y 
+    class="scroll-container main-scroll tabbar-safe-area" 
+    enhanced 
+    show-scrollbar="{{false}}"
+    bounces
+    bindscroll="onPageScroll"
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation
+  >
+    <!-- 占位元素：放在 ScrollView 内部第一个，将内容顶下去 -->
+    <!-- 72px = 56px (搜索框区域高度) + 16px (额外间距) -->
+    <!-- custom-header 组件内部已包含 navBarHeight 的占位，但它是 fixed 的，所以这里需要重新补上 -->
+    <view class="header-placeholder" style="height: {{navBarHeight + 76}}px;"></view>
+
+    <view class="content-wrapper {{isSearchActive ? 'blur' : ''}}">
+      <!-- 轮播图 -->
+      <view class="section banner-section">
+        <swiper class="banner-swiper" style="height: {{bannerHeight}}px;" autoplay circular bindchange="onSwiperChange">
+          <swiper-item wx:for="{{banners}}" wx:key="id" class="banner-item">
+            <view class="banner-card" bindtap="onArticleTap" data-id="{{item.id}}">
+              <image src="{{item.image}}" mode="widthFix" class="banner-image" bindload="onBannerLoad"/>
+            </view>
+          </swiper-item>
+        </swiper>
+        <!-- 自定义指示点 -->
+        <view class="swiper-dots">
+          <view wx:for="{{banners}}" wx:key="id" wx:for-index="bindex" class="dot {{currentSwiperIndex === bindex ? 'active' : ''}}"></view>
+        </view>
+      </view>
+
+    <!-- 核心分类 -->
+    <view class="section category-section {{isHarmony ? 'harmony-mode' : ''}}">
+      <view class="category-grid">
+        <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="onCategoryTap" data-id="{{item.id}}">
+          <view class="category-card" style="background: {{item.bgColor}}; box-shadow: 0 16rpx 40rpx {{item.shadowColor}}">
+            <view class="category-content-wrapper">
+              <!-- 头部：图标 + 标题 -->
+              <view class="card-header">
+                <view class="category-icon-box">
+                  <!-- 分类图标：白色 -->
+                  <image class="category-image" src="{{item.icon}}" mode="aspectFit"></image>
+                </view>
+                <text class="category-name">{{item.name}}</text>
+              </view>
+              <!-- 底部：描述 -->
+              <text class="category-desc">{{item.desc}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 热门推荐 -->
+    <view class="section article-section">
+      <view class="section-header">
+        <view class="section-title-box">
+          <!-- 蓝色竖杠指示器 -->
+          <view class="title-indicator"></view>
+          <text class="section-title">热门推荐</text>
+        </view>
+        <view class="section-more" bindtap="onViewAll">
+          <text>查看全部</text>
+          <image class="arrow-right-icon" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+        </view>
+      </view>
+
+      <view class="article-list">
+        <view class="article-card" wx:for="{{articles}}" wx:key="id" bindtap="onArticleTap" data-id="{{item.id}}">
+          <!-- 上图 -->
+          <image src="{{item.image}}" mode="aspectFill" class="article-image"/>
+          <!-- 下文 -->
+          <view class="article-info">
+            <view class="article-meta">
+              <text class="meta-tag">{{item.category}}</text>
+              <text class="meta-date">{{item.date}}</text>
+            </view>
+            <text class="article-title">{{item.title}}</text>
+            <text class="article-summary">{{item.summary}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 底部留白 -->
+    </view>
+  </scroll-view>
+
+  <!-- 回到顶部按钮 -->
+  <view class="back-to-top {{showBackTop ? 'show' : ''}}" bindtap="onBackToTop">
+    <image class="arrow-up" src="/images/icons/top.svg" mode="aspectFit"></image>
+  </view>
+
+  <!-- 搜索遮罩层 (History & Hot Keys) -->
+  <view class="search-overlay" wx:if="{{isSearchActive}}" style="top: {{navBarHeight + 56}}px;">
+    <!-- History -->
+    <view class="section" wx:if="{{history.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">搜索历史</text>
+        <text class="clear-text" bindtap="onClearHistory">清空</text>
+      </view>
+      <view class="tags-wrapper">
+        <view class="tag" wx:for="{{history}}" wx:key="*this" bindtap="onTagTap" data-keyword="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- Hot Keys Removed -->
+    
+    <!-- 点击空白处关闭搜索 -->
+    <view class="overlay-mask" bindtap="onSearchCancel"></view>
+  </view>
+</view>

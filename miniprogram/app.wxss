@@ -1,0 +1,215 @@
+/** app.wxss */
+page {
+  /* 基础颜色 */
+  --primary-color: #1152d4;
+  --secondary-color: #F97316;
+  
+  /* 背景颜色 */
+  --page-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --glass-bg: rgba(248, 250, 252, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  
+  /* 文字颜色 */
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --text-placeholder: #cbd5e1;
+  
+  /* 边框和分割线 */
+  --border-color: #e2e8f0;
+  --divider-color: #f1f5f9;
+
+  /* 交互反馈 */
+  --active-bg: #f1f5f9;
+  
+  /* 功能背景 */
+  --tag-bg: #eff6ff;
+  --tag-text: #2563eb;
+  
+  /* 辅助色背景 */
+  --blue-bg: #eff6ff;
+  --green-bg: #f0fdf4;
+  --orange-bg: #fff7ed;
+  --pink-bg: #fff1f2;
+  
+  /* 辅助色文字/图标 */
+  --blue-text: #3b82f6;
+  --green-text: #22c55e;
+  --orange-text: #f97316;
+  --pink-text: #ec4899;
+  
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4rpx 20rpx -2rpx rgba(0, 0, 0, 0.05);
+
+  /* 遮罩渐变 (浅色模式) */
+  --mask-gradient: linear-gradient(to right, #ffffff 10%, rgba(255,255,255,0.8) 40%, transparent 100%);
+  
+  /* 导航栏背景 (Light Mode) */
+  --nav-bg: #ffffff;
+
+  background-color: var(--page-bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+  box-sizing: border-box; 
+  color: var(--text-main);
+}
+
+@media (prefers-color-scheme: dark) {
+  page {
+    /* 基础颜色 - 深色模式下稍微提亮 */
+    --primary-color: #3b82f6;
+    --secondary-color: #fb923c;
+    
+    /* 背景颜色 */
+    --page-bg: #111111;
+    --card-bg: #1e1e1e;
+    --glass-bg: rgba(30, 30, 30, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    
+    /* 文字颜色 */
+    --text-main: #e2e8f0;
+    --text-sub: #94a3b8;
+    --text-placeholder: #475569;
+    
+    /* 边框和分割线 */
+    --border-color: #2d2d2d;
+    --divider-color: #2d2d2d;
+
+    /* 交互反馈 */
+    --active-bg: #2d2d2d;
+    
+    /* 功能背景 */
+    --tag-bg: #1e293b;
+    --tag-text: #60a5fa;
+
+    /* 辅助色背景 */
+    --blue-bg: rgba(59, 130, 246, 0.2);
+    --green-bg: rgba(34, 197, 94, 0.2);
+    --orange-bg: rgba(249, 115, 22, 0.2);
+    --pink-bg: rgba(236, 72, 153, 0.2);
+
+    /* 辅助色文字/图标 */
+    --blue-text: #60a5fa;
+    --green-text: #4ade80;
+    --orange-text: #fb923c;
+    --pink-text: #f472b6;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4rpx 20rpx -2rpx rgba(0, 0, 0, 0.3);
+
+    /* 遮罩渐变 */
+    --mask-gradient: linear-gradient(to right, #1e1e1e 10%, rgba(30,30,30,0.8) 40%, transparent 100%);
+    
+    /* 导航栏背景 (Dark Mode) */
+    --nav-bg: #191919;
+  }
+}
+
+/* 全局标准：底栏高度变量 */
+page {
+  --tabbar-height: 160rpx;
+}
+
+/* 全局标准：底栏安全区适配类 */
+/* 将此类用于 ScrollView 或容器，自动避开底栏 */
+.tabbar-safe-area {
+  padding-bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom)) !important;
+  box-sizing: border-box;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+} 
+
+/* 通用卡片样式 */
+.card {
+  background: var(--card-bg);
+  border-radius: 16rpx;
+  box-shadow: var(--shadow-md);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+/* 滚动容器通用样式 */
+.scroll-container {
+  height: 100vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Back To Top - Unified Style */
+.back-to-top {
+  position: fixed;
+  /* 调整底部距离，避开 TabBar (TabBar 高度约 160rpx + 40rpx padding) */
+  /* 200rpx + 32rpx = 232rpx */
+  bottom: 232rpx;
+  right: 40rpx;
+  width: 88rpx;
+  height: 88rpx;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(17, 82, 212, 0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 200; /* Ensure visibility over other fixed elements */
+}
+
+.back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.arrow-up {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 页面切换遮罩层 - 解决安卓页面切换闪烁问题 */
+.page-transition-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.page-transition-mask.light {
+  background-color: #f8fafc;
+}
+
+.page-transition-mask.dark {
+  background-color: #111111;
+}

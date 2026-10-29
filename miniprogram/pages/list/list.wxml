@@ -1,0 +1,42 @@
+<view class="container">
+  <sub-header title="{{title}}"></sub-header>
+  
+  <!-- 加载状态 -->
+  <view class="loading-overlay" wx:if="{{loading}}">
+    <image class="loading-spinner" src="/images/icons/loading.svg" mode="aspectFit"></image>
+    <text class="loading-text">加载中...</text>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{list.length === 0}}">
+    <image class="empty-img" src="{{type === 'favorites' ? '/images/icons/topic.svg' : '/images/icons/clock.svg'}}" mode="aspectFit"></image>
+    <text class="empty-title">{{type === 'favorites' ? '暂无收藏' : '暂无浏览记录'}}</text>
+    <text class="empty-desc">{{type === 'favorites' ? '收藏感兴趣的文章，方便随时查看' : '浏览过的文章会在这里显示'}}</text>
+    <navigator 
+      url="/pages/knowledge/knowledge" 
+      open-type="navigate" 
+      class="empty-action">
+      去知识库看看
+    </navigator>
+  </view>
+  
+  <!-- 列表内容 -->
+  <scroll-view wx:else class="scroll-area" scroll-y type="list" enable-back-to-top>
+    <view class="list-container">
+      <view class="list-item" wx:for="{{list}}" wx:key="id" bindtap="onItemTap" bindlongpress="onLongPress" data-id="{{item.id}}" data-index="{{index}}">
+        <view class="item-content">
+          <view class="item-meta">
+            <text class="item-category" wx:if="{{item.category}}">{{item.category}}</text>
+            <text class="item-date">{{item.date}}</text>
+          </view>
+          <text class="item-title">{{item.title}}</text>
+          <text class="item-summary" wx:if="{{item.summary}}">{{item.summary}}</text>
+        </view>
+        <view class="image-wrapper" wx:if="{{item.image}}">
+          <image class="item-image" src="{{item.image}}" mode="aspectFill" lazy-load="{{true}}"></image>
+          <view class="image-mask"></view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

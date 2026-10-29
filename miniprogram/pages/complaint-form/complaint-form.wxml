@@ -1,0 +1,814 @@
+<wxs module="tools">
+  module.exports.includes = function(arr, item) {
+    return arr.indexOf(item) > -1;
+  }
+</wxs>
+
+<wxs module="utils">
+  module.exports = {
+    includes: function(arr, item) {
+      return arr.indexOf(item) > -1;
+    },
+    getLabel: function(options, id) {
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].id === id) return options[i].label;
+      }
+      return '';
+    }
+  }
+</wxs>
+
+<view class="container" style="{{pageScrollDisabled ? 'overflow: hidden; height: 100vh;' : ''}}">
+  <!-- Privacy Consent Modal -->
+  <privacy-consent 
+    show="{{showPrivacyModal}}" 
+    document-type="civil_complaint" 
+    bind:consent="onPrivacyConsent"
+    bind:showChange="onPrivacyShowChange"
+  />
+  
+  <!-- Fixed Wrapper for Header + Steps -->
+  <view class="fixed-header-wrapper" id="fixed-header">
+    <sub-header title="民事起诉状生成" id="formHeader" showPlaceholder="{{false}}" background="var(--nav-bg)"></sub-header>
+    
+    <!-- Steps Progress -->
+    <view class="steps-header" style="padding-top: {{headerHeight - 20}}px; padding-bottom: 0rpx;">
+      <view class="step-item {{index < currentStep ? 'completed' : ''}} {{index === currentStep ? 'current' : ''}}" wx:for="{{steps}}" wx:key="index" bindtap="jumpToStep" data-step="{{index}}">
+        <view class="step-circle">{{index + 1}}</view>
+        <text class="step-title">{{item.title}}</text>
+        <view class="step-line" wx:if="{{index < steps.length - 1}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Content Area -->
+  <view class="form-content" style="padding-top: {{totalHeaderHeight - 5}}px; padding-bottom: calc({{currentStep === 4 ? '0' : '40'}}rpx + {{paddingBottom}}px); min-height: 100vh; height: {{currentStep === 4 ? '100vh' : 'auto'}}; overflow: {{currentStep === 4 ? 'hidden' : 'visible'}};">
+    
+    <!-- Step 1: Applicant Information -->
+    <view wx:if="{{currentStep === 0}}">
+      
+      <!-- 1. Agent Toggle -->
+      <view class="form-section">
+        <view class="section-title">是否委托代理人代为起诉</view>
+        <radio-group class="radio-group list" bindchange="onHasAgentChange">
+          <label class="radio-list-card {{!formData.hasAgent ? 'selected' : ''}}" bindtap="onHasAgentChange" data-value="false">
+            <view class="radio-list-radio"></view>
+            <view class="radio-list-content">
+              <text class="radio-list-title">否</text>
+              <text class="radio-list-desc">本人/本公司起诉</text>
+            </view>
+            <radio value="false" checked="{{!formData.hasAgent}}" style="display:none;"/>
+          </label>
+          <label class="radio-list-card {{formData.hasAgent ? 'selected' : ''}}" bindtap="onHasAgentChange" data-value="true">
+            <view class="radio-list-radio"></view>
+            <view class="radio-list-content">
+              <text class="radio-list-title">是</text>
+              <text class="radio-list-desc">委托律师/亲属等代为起诉</text>
+            </view>
+            <radio value="true" checked="{{formData.hasAgent}}" style="display:none;"/>
+          </label>
+        </radio-group>
+
+        <!-- Agent Info Form (Conditional) -->
+        <view class="agent-form-container" wx:if="{{formData.hasAgent}}">
+          <view class="form-group">
+            <text class="form-label">代理人姓名</text>
+            <input class="form-input" id="input_agent_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入代理人姓名" value="{{formData.agent.name}}" data-field="agent.name" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">民族</text>
+            <picker range="{{ethnicityOptions}}" bindchange="onEthnicityChange" data-field="agent.ethnicity">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.agent.ethnicity}}">{{formData.agent.ethnicity}}</text>
+                <text class="picker-placeholder" wx:else>请选择民族</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === true}}">
+            <text class="form-label">身份证号码</text>
+            <input class="form-input" id="input_agent_id" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="idcard" placeholder="请输入代理人身份证" value="{{formData.agent.idCard}}" data-field="agent.idCard" bindinput="onIdCardInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">性别</text>
+            <picker range="{{genderOptions}}" bindchange="onGenderChange" data-field="agent.gender">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.agent.gender}}">{{formData.agent.gender}}</text>
+                <text class="picker-placeholder" wx:else>请选择性别</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">出生日期</text>
+            <picker mode="date" bindchange="onBirthDateChange" data-field="agent.birthDate" start="1900-01-01" end="2025-12-31">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.agent.birthDate}}">{{formData.agent.birthDate}}</text>
+                <text class="picker-placeholder" wx:else>请选择出生日期</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input class="form-input" id="input_agent_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="number" placeholder="请输入代理人电话" value="{{formData.agent.phone}}" data-field="agent.phone" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系地址</text>
+            <view style="display: flex; gap: 16rpx; margin-bottom: 16rpx;">
+                <picker mode="region" bindchange="onAddressRegionChange" value="{{formData.agent.region}}" data-target="agent" style="flex: 1;">
+                    <view class="form-picker">
+                        <text class="picker-text" wx:if="{{formData.agent.region.length}}">{{formData.agent.region[0]}} {{formData.agent.region[1]}} {{formData.agent.region[2]}}</text>
+                        <text class="picker-placeholder" wx:else>选择省市区</text>
+                        <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                    </view>
+                </picker>
+            </view>
+            <input class="form-input" id="input_agent_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入代理人详细地址" value="{{formData.agent.detailAddress}}" data-target="agent" bindinput="onAddressDetailInput" cursor-spacing="30"/>
+          </view>
+        </view>
+      </view>
+
+      <!-- 2. Plaintiff Info -->
+      <view class="form-section">
+        <view class="section-title">原告身份</view>
+        <view class="radio-group segmented" style="margin-bottom: 32rpx;">
+          <!-- 滑动指示器 -->
+          <view class="segment-indicator segment-pos-{{formData.plaintiffType === 'individual' ? 0 : 1}}"></view>
+          
+          <view class="radio-segment {{formData.plaintiffType === 'individual' ? 'selected' : ''}}" bindtap="onPlaintiffTypeChange" data-value="individual">
+            <text class="radio-segment-text">个人</text>
+          </view>
+          <view class="radio-segment {{formData.plaintiffType === 'organization' ? 'selected' : ''}}" bindtap="onPlaintiffTypeChange" data-value="organization">
+            <text class="radio-segment-text">公司/其他组织</text>
+          </view>
+        </view>
+
+        <!-- Individual Plaintiff -->
+        <block wx:if="{{formData.plaintiffType === 'individual'}}">
+          <view class="form-group">
+            <text class="form-label">姓名</text>
+            <input class="form-input" id="input_plaintiff_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入姓名" value="{{formData.plaintiff.name}}" data-field="plaintiff.name" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">民族</text>
+            <picker range="{{ethnicityOptions}}" bindchange="onEthnicityChange" data-field="plaintiff.ethnicity">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.plaintiff.ethnicity}}">{{formData.plaintiff.ethnicity}}</text>
+                <text class="picker-placeholder" wx:else>请选择民族</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === true}}">
+            <text class="form-label">身份证号码</text>
+            <input class="form-input" id="input_plaintiff_id" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="idcard" placeholder="请输入身份证号码" value="{{formData.plaintiff.idCard}}" data-field="plaintiff.idCard" bindinput="onIdCardInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">性别</text>
+            <picker range="{{genderOptions}}" bindchange="onGenderChange" data-field="plaintiff.gender">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.plaintiff.gender}}">{{formData.plaintiff.gender}}</text>
+                <text class="picker-placeholder" wx:else>请选择性别</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">出生日期</text>
+            <picker mode="date" bindchange="onBirthDateChange" data-field="plaintiff.birthDate" start="1900-01-01" end="2025-12-31">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.plaintiff.birthDate}}">{{formData.plaintiff.birthDate}}</text>
+                <text class="picker-placeholder" wx:else>请选择出生日期</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input class="form-input" id="input_plaintiff_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="number" placeholder="请输入手机号" value="{{formData.plaintiff.phone}}" data-field="plaintiff.phone" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系地址</text>
+            <view style="display: flex; gap: 16rpx; margin-bottom: 16rpx;">
+                <picker mode="region" bindchange="onAddressRegionChange" value="{{formData.plaintiff.region}}" data-target="plaintiff" style="flex: 1;">
+                    <view class="form-picker">
+                        <text class="picker-text" wx:if="{{formData.plaintiff.region.length}}">{{formData.plaintiff.region[0]}} {{formData.plaintiff.region[1]}} {{formData.plaintiff.region[2]}}</text>
+                        <text class="picker-placeholder" wx:else>选择省市区</text>
+                        <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                    </view>
+                </picker>
+            </view>
+            <input class="form-input" id="input_plaintiff_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入详细地址（如街道/门牌号）" value="{{formData.plaintiff.detailAddress}}" data-target="plaintiff" bindinput="onAddressDetailInput" cursor-spacing="30"/>
+          </view>
+        </block>
+
+        <!-- Organization Plaintiff -->
+        <block wx:if="{{formData.plaintiffType === 'organization'}}">
+           <view class="form-group">
+            <text class="form-label">组织名称</text>
+            <input class="form-input" id="input_org_plaintiff_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入公司或组织完整名称" value="{{formData.orgPlaintiff.name}}" data-field="orgPlaintiff.name" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">统一社会信用代码</text>
+            <input class="form-input" id="input_org_plaintiff_code" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入统一社会信用代码" value="{{formData.orgPlaintiff.code}}" data-field="orgPlaintiff.code" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">负责人</text>
+            <input class="form-input" id="input_org_plaintiff_principal" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="法定代表人或主要负责人姓名" value="{{formData.orgPlaintiff.principal}}" data-field="orgPlaintiff.principal" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系地址</text>
+            <view style="display: flex; gap: 16rpx; margin-bottom: 16rpx;">
+                <picker mode="region" bindchange="onAddressRegionChange" value="{{formData.orgPlaintiff.region}}" data-target="orgPlaintiff" style="flex: 1;">
+                    <view class="form-picker">
+                        <text class="picker-text" wx:if="{{formData.orgPlaintiff.region.length}}">{{formData.orgPlaintiff.region[0]}} {{formData.orgPlaintiff.region[1]}} {{formData.orgPlaintiff.region[2]}}</text>
+                        <text class="picker-placeholder" wx:else>选择省市区</text>
+                        <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                    </view>
+                </picker>
+            </view>
+            <input class="form-input" id="input_org_plaintiff_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入详细地址" value="{{formData.orgPlaintiff.detailAddress}}" data-target="orgPlaintiff" bindinput="onAddressDetailInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input class="form-input" id="input_org_plaintiff_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="number" placeholder="请输入联系电话" value="{{formData.orgPlaintiff.phone}}" data-field="orgPlaintiff.phone" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+        </block>
+      </view>
+
+      <!-- 3. Defendant Info -->
+      <view class="form-section">
+        <view class="section-title">被告身份</view>
+        <view class="radio-group segmented" style="margin-bottom: 32rpx;">
+          <!-- 滑动指示器 -->
+          <view class="segment-indicator segment-pos-{{formData.defendantType === 'individual' ? 0 : 1}}"></view>
+          
+          <view class="radio-segment {{formData.defendantType === 'individual' ? 'selected' : ''}}" bindtap="onDefendantTypeChange" data-value="individual">
+            <text class="radio-segment-text">个人</text>
+          </view>
+          <view class="radio-segment {{formData.defendantType === 'organization' ? 'selected' : ''}}" bindtap="onDefendantTypeChange" data-value="organization">
+            <text class="radio-segment-text">公司/其他组织</text>
+          </view>
+        </view>
+
+        <!-- Individual Defendant -->
+        <block wx:if="{{formData.defendantType === 'individual'}}">
+          <view class="form-group">
+            <text class="form-label">姓名</text>
+            <input class="form-input" id="input_defendant_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入被告姓名" value="{{formData.defendant.name}}" data-field="defendant.name" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">民族</text>
+            <picker range="{{ethnicityOptions}}" bindchange="onEthnicityChange" data-field="defendant.ethnicity">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.defendant.ethnicity}}">{{formData.defendant.ethnicity}}</text>
+                <text class="picker-placeholder" wx:else>请选择民族</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === true}}">
+            <text class="form-label">身份证号码</text>
+            <input class="form-input" id="input_defendant_id" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="idcard" placeholder="请输入身份证号码" value="{{formData.defendant.idCard}}" data-field="defendant.idCard" bindinput="onIdCardInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">性别</text>
+            <picker range="{{genderOptions}}" bindchange="onGenderChange" data-field="defendant.gender">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.defendant.gender}}">{{formData.defendant.gender}}</text>
+                <text class="picker-placeholder" wx:else>请选择性别</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group" wx:if="{{consentIdCard === false}}">
+            <text class="form-label">出生日期</text>
+            <picker mode="date" bindchange="onBirthDateChange" data-field="defendant.birthDate" start="1900-01-01" end="2025-12-31">
+              <view class="form-picker">
+                <text class="picker-text" wx:if="{{formData.defendant.birthDate}}">{{formData.defendant.birthDate}}</text>
+                <text class="picker-placeholder" wx:else>请选择出生日期</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input class="form-input" id="input_defendant_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="number" placeholder="请输入电话" value="{{formData.defendant.phone}}" data-field="defendant.phone" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+           <view class="form-group">
+            <text class="form-label">联系地址</text>
+            <view style="display: flex; gap: 16rpx; margin-bottom: 16rpx;">
+                <picker mode="region" bindchange="onAddressRegionChange" value="{{formData.defendant.region}}" data-target="defendant" style="flex: 1;">
+                    <view class="form-picker">
+                        <text class="picker-text" wx:if="{{formData.defendant.region.length}}">{{formData.defendant.region[0]}} {{formData.defendant.region[1]}} {{formData.defendant.region[2]}}</text>
+                        <text class="picker-placeholder" wx:else>选择省市区</text>
+                        <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                    </view>
+                </picker>
+            </view>
+            <input class="form-input" id="input_defendant_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="被告经营地址或住址" value="{{formData.defendant.detailAddress}}" data-target="defendant" bindinput="onAddressDetailInput" cursor-spacing="30"/>
+          </view>
+        </block>
+
+        <!-- Organization Defendant -->
+        <block wx:if="{{formData.defendantType === 'organization'}}">
+           <view class="form-group">
+            <text class="form-label">组织名称</text>
+            <input class="form-input" id="input_org_defendant_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入被告公司或组织名称" value="{{formData.orgDefendant.name}}" data-field="orgDefendant.name" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">统一社会信用代码</text>
+            <input class="form-input" id="input_org_defendant_code" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入代码（如有）" value="{{formData.orgDefendant.code}}" data-field="orgDefendant.code" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">负责人</text>
+            <input class="form-input" id="input_org_defendant_principal" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="法定代表人或主要负责人姓名" value="{{formData.orgDefendant.principal}}" data-field="orgDefendant.principal" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系地址</text>
+            <view style="display: flex; gap: 16rpx; margin-bottom: 16rpx;">
+                <picker mode="region" bindchange="onAddressRegionChange" value="{{formData.orgDefendant.region}}" data-target="orgDefendant" style="flex: 1;">
+                    <view class="form-picker">
+                        <text class="picker-text" wx:if="{{formData.orgDefendant.region.length}}">{{formData.orgDefendant.region[0]}} {{formData.orgDefendant.region[1]}} {{formData.orgDefendant.region[2]}}</text>
+                        <text class="picker-placeholder" wx:else>选择省市区</text>
+                        <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                    </view>
+                </picker>
+            </view>
+            <input class="form-input" id="input_org_defendant_address" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入详细地址" value="{{formData.orgDefendant.detailAddress}}" data-target="orgDefendant" bindinput="onAddressDetailInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input class="form-input" id="input_org_defendant_phone" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="number" placeholder="请输入联系电话" value="{{formData.orgDefendant.phone}}" data-field="orgDefendant.phone" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- Step 2: Court -->
+    <view wx:if="{{currentStep === 1}}">
+      <view class="form-section">
+        <view class="section-title">管辖法院</view>
+        <view class="form-group">
+          <text class="form-label">选择地区</text>
+          <picker mode="region" bindchange="onRegionChange" value="{{formData.region}}">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{formData.region.length}}">{{formData.region[0]}} {{formData.region[1]}} {{formData.region[2]}}</text>
+              <text class="picker-placeholder" wx:else>请选择省市区</text>
+              <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">法院名称</text>
+          
+          <!-- Picker for recommended courts -->
+          <picker range="{{courtOptions}}" bindchange="onCourtChange" wx:if="{{!isManualCourt}}" disabled="{{isSearchingCourts}}">
+            <view class="form-picker">
+              <text class="picker-text" wx:if="{{isSearchingCourts}}">正在搜索附近法院...</text>
+              <text class="picker-text" wx:else>{{formData.courtName || '请选择法院'}}</text>
+              
+              <view wx:if="{{isSearchingCourts}}" class="loading-spinner"></view>
+              <image wx:else src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+            </view>
+          </picker>
+
+          <!-- Input for manual entry -->
+          <view wx:else style="display: flex; gap: 16rpx; align-items: center;">
+              <input class="form-input" id="input_court_name" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" style="flex: 1;" placeholder="请输入法院完整名称" value="{{formData.courtName}}" data-field="courtName" bindinput="handleInput" cursor-spacing="30"/>
+              <text style="color: var(--primary-color); font-size: 26rpx;" bindtap="resetCourtSelection">重置</text>
+          </view>
+          
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 3: Claims -->
+    <view wx:if="{{currentStep === 2}}">
+      <view class="form-section">
+        <view class="section-title">案由</view>
+        <radio-group class="radio-group list" bindchange="onCauseChange">
+          <label class="radio-list-card {{formData.cause === item.value ? 'selected' : ''}}" 
+                 wx:for="{{causeOptions}}" wx:key="value"
+                 bindtap="onCauseChange" data-value="{{item.value}}">
+            <view class="radio-list-radio"></view>
+            <view class="radio-list-content">
+              <text class="radio-list-title">{{item.label}}</text>
+              <text class="radio-list-desc">{{item.desc}}</text>
+            </view>
+            <radio value="{{item.value}}" checked="{{formData.cause === item.value}}" style="display:none;"/>
+          </label>
+        </radio-group>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title" style="justify-content: space-between;">
+          <text>诉讼请求 (可多选)</text>
+          <view class="selected-count" wx:if="{{formData.claims.length > 0}}">
+            已选 {{formData.claims.length}} 项
+          </view>
+        </view>
+        <view class="radio-group list">
+          <block wx:for="{{claimOptions}}" wx:key="id">
+            <!-- 1. Selection Header Card (Checkbox + Title) -->
+            <view class="selection-header {{tools.includes(formData.claims, item.id) ? 'selected' : ''}} {{item.hasInput ? 'has-sub' : ''}}"
+                  bindtap="onClaimItemTap" data-id="{{item.id}}">
+              <view class="checkbox-list-check"></view>
+              <text class="checkbox-list-text">{{item.labelFull || item.label}}</text>
+            </view>
+            
+            <!-- 2. Sub Input Container (Separate from Header) -->
+            <view class="sub-input-container" wx:if="{{tools.includes(formData.claims, item.id) && (item.hasInput || item.hasSelect)}}">
+              <view class="sub-input-group" wx:if="{{item.hasInput}}">
+                <view class="label-row">
+                    <text class="sub-input-label">{{item.input1Label}}</text>
+                </view>
+                <view class="sub-input-box">
+                  <view class="sub-input-icon-box">
+                    <image class="sub-input-icon-img" src="/images/icons/commodity.svg" mode="aspectFit"/>
+                  </view>
+                  <input class="sub-input" id="input_claim_{{item.id}}_1" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="{{(item.id === '3' || item.id === '6' || item.id === '7' || item.id === '11') ? 'digit' : 'text'}}" placeholder="{{item.input1Placeholder}}" 
+                    value="{{formData.claimInputs[item.id + '_1']}}" 
+                    data-id="{{item.id}}" data-field="1" bindinput="onClaimInput" cursor-spacing="30"/>
+                </view>
+              </view>
+              <view class="sub-input-group" wx:if="{{item.hasInput2}}">
+                <view class="label-row">
+                    <text class="sub-input-label">{{item.input2Label}}</text>
+                </view>
+                <view class="sub-input-box">
+                  <view class="sub-input-icon-box">
+                    <image class="sub-input-icon-img" src="/images/icons/money.svg" mode="aspectFit"/>
+                  </view>
+                  <input class="sub-input" id="input_claim_{{item.id}}_2" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="{{item.input2Placeholder}}" 
+                    value="{{formData.claimInputs[item.id + '_2']}}" 
+                    data-id="{{item.id}}" data-field="2" bindinput="onClaimInput" cursor-spacing="30"/>
+                </view>
+              </view>
+              <!-- Select for invoice type -->
+              <view class="sub-input-group" wx:if="{{item.hasSelect}}">
+                <view class="label-row">
+                    <text class="sub-input-label">{{item.selectLabel}}</text>
+                </view>
+                <picker range="{{item.selectOptions}}" bindchange="onClaimSelectChange" data-id="{{item.id}}">
+                  <view class="sub-input-box no-icon">
+                    <text class="picker-text" wx:if="{{formData.claimInputs[item.id + '_select']}}">{{formData.claimInputs[item.id + '_select']}}</text>
+                    <text class="picker-placeholder" wx:else>请选择</text>
+                    <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                  </view>
+                </picker>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Step 4: Facts -->
+    <view wx:if="{{currentStep === 3}}">
+       <!-- Basic Info -->
+       <view class="form-section" wx:if="{{formData.cause !== 'reputation'}}">
+          <view class="section-title">基本交易信息</view>
+          <view class="form-group">
+            <text class="form-label">购买日期</text>
+            <picker mode="date" value="{{formData.purchaseInfo.date}}" bindchange="onDateChange" data-field="purchaseInfo.date">
+              <view class="form-picker">
+                <text class="picker-text">{{formData.purchaseInfo.date}}</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group">
+            <text class="form-label">购买平台/店铺</text>
+            <input class="form-input" id="input_purchase_platform" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：淘宝某某旗舰店" value="{{formData.purchaseInfo.platform}}" data-field="purchaseInfo.platform" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">商品名称</text>
+            <input class="form-input" id="input_purchase_product" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：iPhone 15 Pro" value="{{formData.purchaseInfo.product}}" data-field="purchaseInfo.product" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">支付金额(元)</text>
+            <input class="form-input" id="input_purchase_price" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" type="digit" placeholder="请输入实际支付金额" value="{{formData.purchaseInfo.price}}" data-field="purchaseInfo.price" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">订单号</text>
+            <input class="form-input" id="input_purchase_order" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="请输入订单号" value="{{formData.purchaseInfo.orderId}}" data-field="purchaseInfo.orderId" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+       </view>
+
+       <!-- Scenario Selection (Multi-select) with Details -->
+       <view class="form-section">
+          <view class="section-title" style="justify-content: space-between;">
+            <text>具体情形（可多选）</text>
+            <view class="selected-count" wx:if="{{formData.scenarios.length > 0}}">
+              已选 {{formData.scenarios.length}} 项
+            </view>
+          </view>
+          <view class="radio-group list">
+            <block wx:for="{{scenarioOptions}}" wx:key="id">
+              <!-- 1. Selection Header Card -->
+              <view class="selection-header {{utils.includes(formData.scenarios, item.id) ? 'selected' : ''}} has-sub"
+                    bindtap="onScenarioItemTap" data-id="{{item.id}}">
+                <view class="checkbox-list-check"></view>
+                <text class="checkbox-list-text">{{item.label}}</text>
+              </view>
+              
+              <!-- 2. Sub Input Container -->
+              <view class="sub-input-container" wx:if="{{utils.includes(formData.scenarios, item.id)}}">
+                <block wx:for="{{scenarioQuestions[item.id]}}" wx:key="id" wx:for-item="q">
+                  <view class="sub-input-group" wx:if="{{!q.showIf || formData.scenarioData[item.id + '_' + q.showIf.field] === q.showIf.value}}">
+                    <text class="sub-input-label">{{q.label}}</text>
+                    
+                    <!-- Text Input -->
+                    <view class="sub-input-box no-icon" wx:if="{{!q.type || q.type === 'text' || q.type === 'number'}}">
+                      <input class="sub-input" 
+                             id="input_scenario_{{item.id}}_{{q.id}}"
+                             adjust-position="{{false}}"
+                             bindfocus="onInputFocus"
+                             bindblur="onInputBlur"
+                             type="{{q.type === 'number' ? 'digit' : 'text'}}"
+                             placeholder="{{q.placeholder}}" 
+                             value="{{formData.scenarioData[item.id + '_' + q.id]}}" 
+                             data-scenario="{{item.id}}"
+                             data-id="{{q.id}}" 
+                             bindinput="onScenarioInput"
+                             cursor-spacing="30"/>
+                    </view>
+                    
+                    <!-- Switch for 是/否 toggle -->
+                    <view wx:if="{{q.type === 'radio'}}" class="sub-radio-group {{q.options.length === 2 && q.options[0] === '是' && q.options[1] === '否' ? 'binary' : ''}}">
+                      <view class="sub-radio-item {{formData.scenarioData[item.id + '_' + q.id] === opt ? 'selected' : ''}}"
+                            wx:for="{{q.options}}" wx:key="*this" wx:for-item="opt"
+                            bindtap="onScenarioRadioTap" data-scenario="{{item.id}}" data-id="{{q.id}}" data-value="{{opt}}">
+                        <text>{{opt}}</text>
+                      </view>
+                    </view>
+
+                    <!-- Switch for scenario 2 q2 and scenario 6 q3 -->
+                    <view wx:if="{{(item.id === '2' && q.id === 'q2') || (item.id === '6' && q.id === 'q3')}}" class="radio-group segmented" style="margin-bottom: 0;">
+                      <view class="segment-indicator segment-pos-{{formData.scenarioData[item.id + '_' + q.id] === '是' ? 1 : 0}}"></view>
+                      <view class="radio-segment {{formData.scenarioData[item.id + '_' + q.id] === '否' ? 'selected' : ''}}"
+                            bindtap="onScenarioRadioTap" data-scenario="{{item.id}}" data-id="{{q.id}}" data-value="否">
+                        <text class="radio-segment-text">否</text>
+                      </view>
+                      <view class="radio-segment {{formData.scenarioData[item.id + '_' + q.id] === '是' ? 'selected' : ''}}"
+                            bindtap="onScenarioRadioTap" data-scenario="{{item.id}}" data-id="{{q.id}}" data-value="是">
+                        <text class="radio-segment-text">是</text>
+                      </view>
+                    </view>
+
+                    <!-- Grid for scenario 9 q2 -->
+                    <view wx:if="{{item.id === '9' && q.id === 'q2'}}" class="sub-grid-group">
+                      <view class="sub-grid-item {{formData.scenarioData[item.id + '_' + q.id] === opt ? 'selected' : ''}}"
+                            wx:for="{{q.options}}" wx:key="*this" wx:for-item="opt"
+                            bindtap="onScenarioRadioTap" data-scenario="{{item.id}}" data-id="{{q.id}}" data-value="{{opt}}">
+                        <text>{{opt}}</text>
+                      </view>
+                    </view>
+
+                    <!-- Date Picker -->
+                    <picker wx:if="{{q.type === 'date'}}" 
+                            mode="date" 
+                            bindchange="onScenarioDateChange" 
+                            data-scenario="{{item.id}}"
+                            data-id="{{q.id}}">
+                        <view class="sub-input-box no-icon">
+                            <text class="picker-text" wx:if="{{formData.scenarioData[item.id + '_' + q.id]}}">{{formData.scenarioData[item.id + '_' + q.id]}}</text>
+                            <text class="picker-placeholder" wx:else>{{q.placeholder || '请选择日期'}}</text>
+                            <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+                        </view>
+                    </picker>
+                  </view>
+                </block>
+              </view>
+            </block>
+          </view>
+       </view>
+
+       <!-- Negotiation -->
+       <view class="form-section" wx:if="{{formData.cause !== 'reputation'}}">
+          <view class="section-title">协商情况</view>
+          <view class="form-group">
+            <text class="form-label">协商时间</text>
+            <picker mode="date" value="{{formData.negotiation.date}}" bindchange="onDateChange" data-field="negotiation.date">
+              <view class="form-picker">
+                <text class="picker-text">{{formData.negotiation.date}}</text>
+                <image src="/images/icons/arrow-right.svg" class="picker-arrow"></image>
+              </view>
+            </picker>
+          </view>
+          <view class="form-group">
+            <text class="form-label">沟通方式</text>
+            <input class="form-input" id="input_negotiation_method" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：微信/电话/平台客服" value="{{formData.negotiation.method}}" data-field="negotiation.method" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+          <view class="form-group">
+            <text class="form-label">对方态度/结果</text>
+            <input class="form-input" id="input_negotiation_result" adjust-position="{{false}}" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder="如：拒绝赔偿/置之不理" value="{{formData.negotiation.result}}" data-field="negotiation.result" bindinput="handleInput" cursor-spacing="30"/>
+          </view>
+       </view>
+    </view>
+
+    <!-- Step 5: Result -->
+    <view wx:if="{{currentStep === 4}}" style="height: 100%; display: flex; flex-direction: column;">
+      <!-- Added class 'transparent-section' to remove default white bg/padding -->
+      <view class="form-section transparent-section" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 0;">
+        <view class="section-title" style="display: flex; justify-content: space-between; align-items: center; padding-left: 24rpx; flex-shrink: 0;">
+          <text>生成结果预览</text>
+        </view>
+        
+        <!-- Preview Box (Read Only, Partial) -->
+        <!-- Dynamic Height: Use flex: 1 to fill remaining space -->
+        <!-- Added 'pointer-events: auto' just in case, though bindtap should work -->
+        <view class="preview-box" bindtap="viewFullDocument" style="flex: 1; height: 0; overflow: hidden;" data-testid="preview-box">
+          <!-- Mask needs to NOT block clicks, or propagate them. -->
+          <!-- In mp, child bindtap bubbles. But if child has no handler, parent catches it. -->
+          <!-- The mask covers the text. We should bind tap on mask too or make it pass through. -->
+          <!-- Safest way: bindtap on the container is fine, as long as children don't catch-stop it. -->
+          <view class="preview-mask">
+             <text class="preview-mask-text">点击查看完整文书</text>
+          </view>
+          <text class="result-text-partial" user-select="{{true}}">{{generatedText}}</text>
+        </view>
+        
+        <!-- Bottom Area: Buttons + Warning -->
+        <view class="bottom-area" style="flex-shrink: 0; padding-bottom: 40rpx;">
+            <!-- Button Group: Evidence + Full Doc -->
+            <view class="btn-group" style="margin-top: 24rpx; display: flex; flex-direction: column; gap: 20rpx;">
+            <view style="display: flex; gap: 20rpx;">
+                <button class="btn-secondary" bindtap="prevStep" style="width: auto; flex: 1;">上一步</button>
+                <button class="btn-secondary" bindtap="showEvidenceModal" style="width: auto; flex: 1;">查看取证提示</button>
+            </view>
+            <button class="btn-primary" bindtap="exportPDF" style="width: 100%; background: linear-gradient(135deg, #2B32B2 0%, #1488CC 100%);" disabled="{{isExporting}}">
+              <block wx:if="{{isExporting}}">
+                <view class="btn-loading">
+                  <view class="loading-spinner-white"></view>
+                  <text>生成中...</text>
+                </view>
+              </block>
+              <block wx:else>导出PDF</block>
+            </button>
+            </view>
+
+            <!-- Bottom Warning -->
+            <view class="bottom-warning">
+                <text user-select="{{true}}">本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。建议用户在正式提交前请专业人士复核。</text>
+            </view>
+        </view>
+
+      </view>
+      <!-- Bottom Hint Section Removed as requested -->
+    </view>
+
+  <!-- Evidence Modal -->
+  <view class="modal-mask" wx:if="{{showEvidenceModal}}" bindtap="hideEvidenceModal"></view>
+  <view class="modal-container" wx:if="{{showEvidenceModal}}">
+    <view class="modal-header">
+      <view class="modal-title-wrapper">
+          <!-- Using Image with CSS filter for color -->
+          <image class="modal-icon-bulb" src="/images/icons/bulb.svg" mode="aspectFit"></image>
+          <text class="modal-title">取证提示</text>
+      </view>
+      <view class="modal-close" bindtap="hideEvidenceModal">×</view>
+    </view>
+    
+    <scroll-view scroll-y class="modal-content">
+      
+      <!-- 1. General Evidence -->
+      <view class="evidence-group">
+        <view class="evidence-group-header">
+            <view class="number-badge">1</view>
+            <text class="evidence-group-title">一般证据</text>
+        </view>
+        
+        <view class="evidence-list">
+            <!-- Item 1: Subject ID -->
+            <view class="evidence-check-item">
+                <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+                <text class="check-text">主体身份证据</text>
+            </view>
+
+            <!-- Item 2: Pre-rights protection -->
+            <view class="evidence-check-item">
+                <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+                <text class="check-text">已先行维权证据（沟通协商截图等）</text>
+            </view>
+            
+            <!-- Item 3: Order Details -->
+            <view class="evidence-check-item">
+                <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+                <text class="check-text">订单详情页截图</text>
+            </view>
+
+            <!-- Item 4: Payment Voucher -->
+            <view class="evidence-check-item">
+                <image class="check-icon" src="/images/icons/check-circle.svg"></image>
+                <text class="check-text">支付凭证</text>
+            </view>
+        </view>
+      </view>
+
+      <!-- 2. Scenario Specific Evidence -->
+      <!-- Dynamic rendering based on selected scenarios -->
+      <block wx:for="{{evidenceList.scenarios}}" wx:key="index">
+          <view class="evidence-group">
+            <view class="evidence-group-header">
+                <view class="number-badge">{{index + 2}}</view>
+                <text class="evidence-group-title">{{item.title}}</text>
+            </view>
+            
+            <!-- Removed "Special Evidence Requirements" text -->
+            
+            <!-- Card Style Evidence Items -->
+            <view class="evidence-cards">
+                <view class="evidence-card" wx:for="{{item.items}}" wx:for-item="subItem" wx:key="*this">
+                    <view class="card-content">
+                        <!-- Removed Title as requested, only description -->
+                        <text class="card-desc">{{subItem}}</text>
+                    </view>
+                </view>
+                
+                <!-- Removed static examples, using dynamic data from JS -->
+            </view>
+          </view>
+      </block>
+
+    </scroll-view>
+    <!-- Footer removed as per design (close button is top right) -->
+    <view class="modal-footer-placeholder"></view>
+  </view>
+
+  <!-- Disclaimer Modal -->
+  <view class="modal-mask" wx:if="{{showDisclaimerModal}}"></view>
+  <view class="modal-container" wx:if="{{showDisclaimerModal}}">
+    <view class="modal-header">
+      <view class="modal-title-wrapper">
+          <image class="modal-icon-warning" src="/images/icons/warning.svg" mode="aspectFit"></image>
+          <text class="modal-title">法律风险提示</text>
+      </view>
+      <view class="modal-close" bindtap="closeDisclaimerModal">×</view>
+    </view>
+    
+    <view class="modal-content">
+      <view class="warning-text-box">
+        <text>本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。</text>
+      </view>
+      
+      <view class="checkbox-container" bindtap="toggleDisclaimerCheckbox">
+        <view class="checkbox {{disclaimerAccepted ? 'checked' : ''}}">
+            <view class="checkmark" wx:if="{{disclaimerAccepted}}"></view>
+        </view>
+        <text class="checkbox-label">我已阅读并理解以上提示</text>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button class="btn-primary" disabled="{{!disclaimerAccepted}}" bindtap="confirmDisclaimer">继续生成</button>
+    </view>
+  </view>
+
+  <!-- Signature Modal -->
+  <view class="modal-mask" wx:if="{{showSignatureModal}}" bindtap="hideSignatureModal"></view>
+  <view class="modal-container" wx:if="{{showSignatureModal}}">
+    <view class="modal-header">
+      <view class="modal-title-wrapper">
+          <image class="modal-icon-warning" src="/images/icons/edit.svg" mode="aspectFit"></image>
+          <text class="modal-title">签名提示</text>
+      </view>
+      <view class="modal-close" bindtap="hideSignatureModal">×</view>
+    </view>
+    
+    <view class="modal-content">
+      <view class="signature-tips">
+        <view class="tip-item">
+          <text class="tip-number">1</text>
+          <text class="tip-text">打印生成的民事起诉状</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-number">2</text>
+          <text class="tip-text">在"具状人"处签名或盖章</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-number">3</text>
+          <text class="tip-text">也可按手印确认</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button class="btn-primary {{isGeneratingPDF ? 'loading' : ''}}" bindtap="openGeneratedPDF" disabled="{{isGeneratingPDF}}">
+        <view wx:if="{{isGeneratingPDF}}" class="btn-loading-icon"></view>
+        <text>{{isGeneratingPDF ? '正在生成PDF...' : '查看PDF'}}</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="footer-actions" wx:if="{{currentStep < 4}}">
+    <button class="btn-secondary" bindtap="prevStep" wx:if="{{currentStep > 0}}">上一步</button>
+    <!-- Use nextStep for all steps including step 3, as nextStep now handles generate() logic -->
+    <button class="btn-primary" bindtap="nextStep" wx:if="{{currentStep < 3}}">下一步</button>
+    <button class="btn-primary" bindtap="nextStep" wx:if="{{currentStep === 3}}">生成文书</button>
+  </view>
+
+  </view>
+</view>

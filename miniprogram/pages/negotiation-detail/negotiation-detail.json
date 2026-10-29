@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "协商函详情",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "sub-header": "/components/sub-header/sub-header"
+  }
+}

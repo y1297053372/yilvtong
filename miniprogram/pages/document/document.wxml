@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 页面切换遮罩层 - 解决安卓闪烁问题 -->
+  <view class="page-transition-mask {{isDarkMode ? 'dark' : 'light'}}" animation="{{maskAnimation}}" hidden="{{maskHidden}}"></view>
+
+  <custom-header pageName="文书生成"></custom-header>
+
+  <scroll-view scroll-y class="scroll-container tabbar-safe-area" enhanced show-scrollbar="{{false}}" bounces>
+  <view class="content">
+    <!-- 轮播图 -->
+    <view class="section banner-section">
+      <swiper class="banner-swiper" style="height: {{bannerHeight}}px;" autoplay circular bindchange="onSwiperChange">
+        <swiper-item wx:for="{{banners}}" wx:key="id" class="banner-item">
+          <view class="banner-card" bindtap="onBannerTap" data-index="{{index}}">
+            <image src="{{item.image}}" mode="widthFix" class="banner-image" lazy-load="{{true}}" bindload="onBannerLoad" data-index="{{index}}"/>
+          </view>
+        </swiper-item>
+      </swiper>
+      <!-- 自定义指示点 -->
+      <view class="swiper-dots">
+        <view wx:for="{{banners}}" wx:key="id" wx:for-index="bindex" class="dot {{currentSwiperIndex === bindex ? 'active' : ''}}"></view>
+      </view>
+    </view>
+
+    <!-- 上方两个小卡片：举报文书生成 + 协商函生成 -->
+    <view class="card-row">
+      <!-- 举报文书生成 -->
+      <view class="card card-small card-complaint" bindtap="navigateToReport">
+        <view class="card-bg">
+          <image class="card-bg-img" src="/images/card-bg/complaint-bg.jpg" mode="aspectFill"></image>
+          <view class="card-bg-gradient"></view>
+        </view>
+        <view class="card-content">
+          <view class="glass-icon">
+            <image class="card-icon" src="/images/icons/card-complaint.svg" mode="aspectFit"></image>
+          </view>
+          <view class="card-info">
+            <text class="card-title">举报文书生成</text>
+            <text class="card-desc">举报信邮件/线上举报文本一键生成</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 协商函生成 -->
+      <view class="card card-small card-negotiation" bindtap="navigateToNegotiation">
+        <view class="card-bg">
+          <image class="card-bg-img" src="/images/card-bg/negotiation-bg.jpg" mode="aspectFill"></image>
+          <view class="card-bg-gradient"></view>
+        </view>
+        <view class="card-content">
+          <view class="glass-icon">
+            <image class="card-icon" src="/images/icons/card-negotiation.svg" mode="aspectFit"></image>
+          </view>
+          <view class="card-info">
+            <text class="card-title">协商函生成</text>
+            <text class="card-desc">向商家发送正式协商维权要求</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 民事起诉状生成 - 大卡片 -->
+    <view class="card card-large card-civil" bindtap="navigateToComplaint">
+      <view class="card-bg">
+        <image class="card-bg-img" src="/images/card-bg/civil-bg.jpg" mode="aspectFill"></image>
+        <view class="card-bg-gradient"></view>
+      </view>
+      <view class="card-content">
+        <view class="glass-icon">
+          <image class="card-icon" src="/images/icons/card-civil.svg" mode="aspectFit"></image>
+        </view>
+        <view class="card-info">
+          <text class="card-title">民事起诉状生成</text>
+          <text class="card-desc">消费纠纷、买卖合同等常用起诉状智能生成</text>
+        </view>
+        <image class="arrow-icon" src="/images/icons/arrow-right.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <!-- 底部提示 -->
+    <view class="bottom-notice">
+      <image class="notice-icon" src="/images/icons/warning.svg" mode="aspectFit"></image>
+      <text class="notice-text">本工具为辅助生成，生成的文书仅供参考，不构成正式法律意见。正式使用前，建议根据自身情况咨询专业律师。</text>
+    </view>
+  </view>
+  </scroll-view>
+</view>

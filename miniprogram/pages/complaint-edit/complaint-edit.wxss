@@ -1,0 +1,86 @@
+.edit-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #F7F8FA;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+  height: 88rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+  padding-top: env(safe-area-inset-top);
+}
+
+.back-btn, .save-btn {
+  padding: 16rpx 24rpx;
+  font-size: 28rpx;
+}
+
+.back-btn {
+  color: #666;
+}
+
+.save-btn {
+  color: #1152d4;
+  font-weight: 500;
+}
+
+.edit-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.edit-content {
+  flex: 1;
+  padding: 32rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.edit-textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 80vh;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  font-family: "FangSong", "STFangSong", "SimSun", serif;
+  font-size: 32rpx;
+  color: #333;
+  line-height: 1.8;
+}
+
+@media (prefers-color-scheme: dark) {
+  .edit-container {
+    background: #000;
+  }
+
+  .edit-header {
+    background: #1F2937;
+    border-bottom-color: #374151;
+  }
+
+  .back-btn {
+    color: #9CA3AF;
+  }
+
+  .save-btn {
+    color: #60a5fa;
+  }
+
+  .edit-title {
+    color: #E5E7EB;
+  }
+
+  .edit-textarea {
+    background: #1F2937;
+    color: #D1D5DB;
+  }
+}

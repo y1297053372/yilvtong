@@ -1,0 +1,20 @@
+<!-- components/custom-header/custom-header.wxml -->
+<view class="custom-header {{transparent ? 'transparent' : ''}}" style="height: {{navBarHeight}}px;">
+  <view class="header-content" style="margin-top: {{statusBarHeight}}px; height: {{contentHeight}}px;">
+    <view class="brand-area">
+      <view class="logo-box">
+        <!-- Logo 图标：白色 -->
+        <image class="logo-image" src="/images/icons/logo.svg" mode="aspectFit"></image>
+      </view>
+      <view class="brand-text-area">
+        <text class="brand-name">{{title}}</text>
+        <view class="brand-divider" wx:if="{{pageName}}"></view>
+        <text class="page-name" wx:if="{{pageName}}">{{pageName}}</text>
+      </view>
+    </view>
+    
+    <!-- 插槽，用于放置搜索框等额外内容 -->
+    <slot></slot>
+  </view>
+</view>
+<view class="header-placeholder" style="height: {{navBarHeight}}px;" wx:if="{{!noPlaceholder}}"></view>

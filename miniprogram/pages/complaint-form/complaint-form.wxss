@@ -1,0 +1,1567 @@
+/* pages/complaint-form/complaint-form.wxss */
+.container {
+  min-height: 100vh;
+  display: block; /* Changed from flex to block to allow natural page flow */
+  background-color: var(--page-bg);
+  box-sizing: border-box;
+}
+
+.main-scroll {
+  /* Removed as we use page scrolling now */
+  width: 100%;
+}
+
+/* Unified Glass Background */
+.glass-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99; /* Behind header wrapper */
+  background-color: var(--nav-bg); /* Use theme variable */
+  /* backdrop-filter: blur(20px);  <-- Removed blur to ensure solid dark color */
+  /* -webkit-backdrop-filter: blur(20px); */
+  box-shadow: none; /* Removed shadow to blend seamlessly */
+  border-bottom: none; /* Removed border */
+}
+
+/* Fixed Wrapper for Header + Steps */
+.fixed-header-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  /* Apply unified background color here */
+  background-color: var(--nav-bg); 
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20rpx; 
+}
+
+/* Steps Header - No longer fixed itself, but part of wrapper */
+.steps-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40rpx 20rpx 40rpx;
+  background-color: transparent;
+  box-shadow: none;
+  margin-top: 0;
+  color: var(--text-main);
+}
+
+/* Specific step title color for better visibility on dark header */
+.step-title {
+  font-size: 20rpx;
+  color: var(--text-sub); /* Use theme variable */
+  transition: all 0.3s ease;
+}
+
+.step-item.active .step-title {
+  color: var(--primary-color); /* Use primary color */
+  font-weight: 500;
+}
+
+/* Add padding to container to prevent content from being hidden */
+/* Needs to account for sub-header (~88rpx or 44px) + steps (~140rpx) */
+/* .container styles merged to top */
+
+.step-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.step-circle {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background-color: var(--active-bg);
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.step-title {
+  font-size: 20rpx;
+  color: var(--text-sub);
+  transition: all 0.3s ease;
+}
+
+.step-line {
+  position: absolute;
+  top: 24rpx;
+  left: 50%;
+  width: 100%;
+  height: 4rpx;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+.step-item.completed .step-circle {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.step-item.completed .step-title {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.step-item.completed .step-line {
+  background-color: var(--primary-color);
+}
+
+/* Current State - Hollow Circle */
+.step-item.current .step-circle {
+  background-color: var(--card-bg); /* Use card bg (white/dark) for hollow effect */
+  color: var(--primary-color);
+  border: 4rpx solid var(--primary-color); /* Thicker border */
+  box-sizing: border-box; /* Ensure border is included in size */
+  line-height: 1; /* Reset line-height to avoid offset */
+}
+
+.step-item.current .step-title {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Line logic: Line is to the right. Current step's right line should be gray. */
+.step-item.current .step-line {
+  background-color: var(--border-color);
+}
+
+/* Scroll Content */
+.form-content {
+  /* flex: 1; <-- Removed to allow natural height */
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+/* Form Sections - New Card Style */
+.form-section {
+  background-color: var(--card-bg);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 32rpx;
+  display: flex;
+  align-items: center;
+  padding-left: 20rpx;
+  position: relative;
+}
+
+.section-title::before {
+  content: "";
+  width: 6rpx;
+  height: 32rpx;
+  background-color: var(--primary-color);
+  margin-right: 16rpx;
+  border-radius: 6rpx;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Form Inputs - New Style */
+.form-group {
+  margin-bottom: 32rpx;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-main);
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  background-color: var(--active-bg);
+  border: none;
+  border-radius: 16rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  color: var(--text-main);
+}
+
+.form-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.form-picker {
+  width: 100%;
+  height: 88rpx;
+  background-color: var(--active-bg);
+  border: none;
+  border-radius: 16rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.picker-text {
+  color: var(--text-main);
+}
+
+.picker-placeholder {
+  color: var(--text-placeholder);
+}
+
+/* Radio Group Styles */
+
+/* Agent Toggle - 横向排列的是否选项 */
+.radio-group.agent-toggle {
+  display: flex;
+  flex-direction: row;
+  gap: 20rpx;
+}
+
+.agent-toggle-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 24rpx;
+  border-radius: 28rpx;
+  border: 2rpx solid var(--border-color);
+  background-color: var(--card-bg);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agent-toggle-item.selected {
+  border-color: var(--primary-color);
+  background-color: var(--blue-bg);
+}
+
+.agent-toggle-text {
+  font-size: 28rpx;
+  color: var(--text-main);
+  font-weight: 500;
+  text-align: center;
+  transition: color 0.25s ease;
+}
+
+.agent-toggle-item.selected .agent-toggle-text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 1. List Card Style - 用于代理人选择和案由（带标题+描述） */
+.radio-group.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.radio-list-card {
+  display: flex;
+  align-items: flex-start;
+  padding: 28rpx 24rpx;
+  border-radius: 28rpx;
+  border: 2rpx solid var(--border-color);
+  background-color: var(--card-bg);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20rpx;
+}
+
+.radio-list-card.selected {
+  border-color: var(--primary-color);
+  background-color: var(--blue-bg);
+}
+
+/* 左侧圆形单选框 */
+.radio-list-radio {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--border-color);
+  background-color: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.radio-list-card.selected .radio-list-radio {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+}
+
+/* 选中时内部的白点 */
+.radio-list-radio::after {
+  content: '';
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #fff;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+
+.radio-list-card.selected .radio-list-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 内容区域 */
+.radio-list-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.radio-list-title {
+  font-size: 32rpx;
+  color: var(--text-main);
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 0.25s ease;
+}
+
+.radio-list-card.selected .radio-list-title {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.radio-list-desc {
+  font-size: 26rpx;
+  color: var(--text-sub);
+  line-height: 1.5;
+  transition: color 0.25s ease;
+}
+
+.radio-list-card.selected .radio-list-desc {
+  color: var(--blue-text);
+  opacity: 0.8;
+}
+
+/* Selection Header (New Class) */
+.selection-header {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-radius: 32rpx; /* rounded-xl (1rem) */
+  border: 2rpx solid var(--border-color);
+  background-color: var(--card-bg);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20rpx;
+  margin-bottom: 24rpx; /* Default margin */
+  position: relative;
+  z-index: 20; /* Ensure above container */
+}
+
+/* Remove margin when selected to sit flush with container */
+.selection-header.selected {
+  border-color: #2563EB; /* Primary Blue */
+  background-color: #EFF6FF; /* Blue 50 */
+  /* margin-bottom: 0; REMOVED default removal */
+  z-index: 20; 
+}
+
+/* Only remove margin and flatten corners if it has sub-inputs */
+.selection-header.selected.has-sub {
+  margin-bottom: 16rpx; /* Add gap back */
+  /* Restore corners */
+  border-bottom-left-radius: 32rpx;
+  border-bottom-right-radius: 32rpx;
+  border-bottom: 2rpx solid #2563EB; /* Restore border */
+  padding-bottom: 28rpx;
+}
+
+/* Checkbox List Card - Inner Part (Deprecated or used inside?) */
+/* Since we moved logic to selection-header, we can simplify */
+.checkbox-list-card {
+  /* No longer used as wrapper, but if present inside... */
+  display: none; 
+}
+
+/* Left Checkbox */
+.checkbox-list-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 10rpx;
+  border: 4rpx solid var(--border-color);
+  background-color: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  margin-left: 8rpx; /* Added margin to shift right */
+}
+
+.selection-header.selected .checkbox-list-check {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+}
+
+/* Checkmark */
+.checkbox-list-check::after {
+  content: '';
+  width: 10rpx;
+  height: 18rpx;
+  border-right: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(45deg) translate(-1rpx, -2rpx);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.selection-header.selected .checkbox-list-check::after {
+  opacity: 1;
+}
+
+.checkbox-list-text {
+  font-size: 32rpx;
+  color: var(--text-main);
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+
+.selection-header.selected .checkbox-list-text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 2. Segmented Control Style - 滑动指示器样式（与搜索结果页一致） */
+.radio-group.segmented {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--active-bg);
+  border-radius: 24rpx;
+  padding: 12rpx;
+  position: relative;
+}
+
+/* 滑动指示器 */
+.segment-indicator {
+  position: absolute;
+  top: 12rpx;
+  bottom: 12rpx;
+  left: 12rpx;
+  width: calc((100% - 24rpx) / 2);
+  background-color: var(--primary-color);
+  border-radius: 12rpx;
+  box-shadow: 0 4rpx 12rpx rgba(17, 82, 212, 0.25);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+/* 指示器位置 - 两个选项 */
+.segment-pos-0 { transform: translateX(0%); }
+.segment-pos-1 { transform: translateX(100%); }
+
+.radio-segment {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18rpx 16rpx;
+  border-radius: 18rpx;
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.radio-segment-text {
+  font-size: 30rpx;
+  color: var(--text-sub);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.radio-segment.selected .radio-segment-text {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Legacy radio styles for other radio groups */
+.radio-group.legacy {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-main);
+}
+
+.radio-label radio, .radio-label checkbox {
+  transform: scale(0.8);
+  margin-right: 8rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Footer Actions */
+.footer-actions {
+  /* position: fixed; <-- Removed fixed positioning */
+  /* bottom: 0; */
+  /* left: 0; */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24rpx 32rpx;
+  background-color: transparent; /* Changed to transparent as it flows with content */
+  /* box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05); <-- Removed shadow */
+  display: flex;
+  gap: 24rpx;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom)); /* More padding at bottom */
+  z-index: 1; /* Lower z-index */
+  margin-top: 20rpx;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #1152d4 0%, #3b82f6 100%);
+  color: #fff;
+  font-size: 30rpx;
+  border-radius: 32rpx;
+  border: none;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(17, 82, 212, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.btn-primary.loading {
+  opacity: 0.8;
+}
+
+.btn-loading-icon {
+  width: 32rpx;
+  height: 32rpx;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.btn-primary[disabled] {
+  background: #A0CFFF !important; /* Lighter blue */
+  color: #FFFFFF !important;
+  box-shadow: none;
+  opacity: 1; /* Override default opacity */
+}
+
+.btn-secondary {
+  width: 200rpx;
+  background-color: transparent;
+  color: var(--text-main);
+  font-size: 30rpx;
+  border-radius: 32rpx;
+  border: 2rpx solid var(--border-color);
+  font-weight: 500;
+}
+
+/* Override or New Class for Transparent Section */
+ .transparent-section {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+ 
+ /* Preview Styles */
+  .preview-box {
+   position: relative;
+   width: 100%;
+   /* height handled inline by JS */
+   /* Removed card style: background, border-radius, border, box-shadow */
+   background: transparent;
+   padding: 0 10rpx; /* Minimal horizontal padding */
+   box-sizing: border-box;
+   overflow: hidden;
+ }
+ 
+ .result-text-partial {
+   font-family: "FangSong", "STFangSong", "SimSun", serif;
+   font-size: 30rpx; 
+   color: #333;
+   line-height: 1.6;
+   display: block;
+   white-space: pre-wrap; 
+   text-align: justify;
+ }
+ 
+ /* Mask Restored - Gradient Only */
+ .preview-mask {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   /* Enhanced gradient for better fade out effect on transparent bg */
+   background: linear-gradient(to bottom, rgba(247,248,250,0) 0%, rgba(247,248,250,0.8) 70%, #F7F8FA 100%);
+   display: flex;
+   align-items: flex-end;
+   justify-content: center;
+   padding-bottom: 40rpx;
+   z-index: 10;
+ }
+ 
+ .preview-mask-text {
+   font-size: 30rpx;
+   color: #333333; /* Changed to black/dark grey */
+   font-weight: normal; /* Removed bold */
+   /* Removed capsule style: background, padding, border-radius, box-shadow */
+   background: transparent;
+   padding: 0;
+   box-shadow: none;
+ }
+
+
+
+.evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.evidence-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 28rpx;
+  color: var(--text-main);
+  padding: 16rpx;
+  background-color: var(--blue-bg);
+  border-radius: 8rpx;
+}
+
+/* Selected Count Tag */
+.selected-count {
+  background-color: var(--blue-bg);
+  color: var(--blue-text);
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Sub Input Container - Visual grouping for inputs */
+.sub-input-container {
+  background-color: rgba(239, 246, 255, 0.6); /* Blue 50 with opacity */
+  border: 2rpx solid #DBEAFE; /* Blue 100 */
+  /* Restore top border and corners */
+  border-top: 2rpx solid #DBEAFE; 
+  border-radius: 32rpx; /* Full rounded */
+  padding: 32rpx 24rpx 24rpx 24rpx; 
+  /* Reset margins to be standalone */
+  margin-top: 0; 
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 24rpx;
+  position: relative;
+  z-index: 10;
+}
+
+/* Label Row */
+.label-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.required-star {
+  color: #FF4D4F;
+  margin-left: 8rpx;
+  font-size: 28rpx;
+}
+
+/* Sub Radio Group - 子选项单选 */
+.sub-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* 是/否二选一 - 横向排列 */
+.sub-radio-group.binary {
+  flex-direction: row;
+  gap: 20rpx;
+}
+
+.sub-radio-group.binary .sub-radio-item {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Switch Group - 滑块开关样式 */
+.sub-switch-group {
+  display: flex;
+  background-color: #F5F5F5;
+  border-radius: 32rpx;
+  padding: 4rpx;
+  position: relative;
+  gap: 4rpx;
+}
+
+.sub-switch-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 28rpx;
+  border-radius: 28rpx;
+  font-size: 28rpx;
+  color: var(--text-sub);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.sub-switch-item.selected {
+  background-color: #ffffff;
+  color: var(--primary-color);
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+/* Grid Group - 2×2网格布局 */
+.sub-grid-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+}
+
+.sub-grid-item {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx 20rpx;
+  font-size: 30rpx;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2rpx solid transparent;
+}
+
+.sub-grid-item.selected {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 4rpx 12rpx rgba(17, 82, 212, 0.25);
+  font-weight: 600;
+}
+
+.sub-radio-item {
+  background-color: #ffffff;
+  border-radius: 32rpx; /* Increased from 16rpx to match sub-input-box */
+  padding: 24rpx 28rpx;
+  font-size: 28rpx;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+}
+
+.sub-radio-item.selected {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.sub-input-group {
+  margin-bottom: 24rpx;
+}
+
+.sub-input-group:last-child {
+  margin-bottom: 0;
+}
+
+.sub-input-label {
+  font-size: 26rpx;
+  color: var(--text-main);
+  font-weight: 500;
+  margin-bottom: 12rpx; /* Increased from 0/default to add space */
+  display: block;
+}
+
+/* Sub Input Box with Floating Icon */
+.sub-input-box {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border-radius: 32rpx; /* rounded-xl */
+  height: 96rpx; /* Slightly taller */
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.02);
+  border: 2rpx solid rgba(191, 219, 254, 0.6); /* Blue 200 opacity */
+  padding: 0 24rpx 0 88rpx; /* Default left padding for icon space */
+  position: relative;
+}
+
+/* Modifier for inputs without icons */
+.sub-input-box.no-icon {
+  padding-left: 24rpx; /* Remove extra left padding */
+}
+
+/* Floating Icon Box - Absolute positioning */
+.sub-input-icon-box {
+  position: absolute;
+  left: 24rpx; /* pl-3 approx */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48rpx; /* w-6 */
+  height: 48rpx;
+  background-color: #DBEAFE; /* Blue 100 */
+  border-radius: 12rpx; /* rounded-md */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.sub-input-icon-img {
+  width: 28rpx; /* text-sm */
+  height: 28rpx;
+  /* Filter to make it Blue 500 (#3B82F6) */
+  filter: invert(43%) sepia(93%) saturate(1352%) hue-rotate(202deg) brightness(101%) contrast(96%);
+}
+
+.sub-input {
+  flex: 1;
+  height: 100%;
+  font-size: 28rpx;
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.sub-input::placeholder {
+  color: #C0C4CC;
+}
+
+/* Selected State Colors - Light Mode (Handled by selection-card now) */
+.checkbox-list-card.selected {
+  /* No longer used on inner card directly */
+  background-color: transparent;
+  border-color: transparent;
+}
+
+/* AI Polish Button */
+.ai-polish-btn {
+  background: var(--blue-bg);
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: var(--blue-text);
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+/* Evidence Button */
+.btn-evidence {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 30rpx;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-top: 20rpx;
+}
+
+/* Modal Styles */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+/* Modal Base */
+.modal-container {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 600rpx;
+  /* Remove max-height constraint or set it based on content? */
+  /* If content is short, it should shrink. If long, scroll. */
+  max-height: 80vh; 
+  /* "display: flex" with "flex-direction: column" is correct for header/content/footer layout */
+  background: #fff;
+  border-radius: 24rpx;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.15);
+}
+
+.modal-header {
+  padding: 32rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #F0F2F5;
+}
+
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.modal-icon-bulb {
+    width: 40rpx;
+    height: 40rpx;
+    /* Use drop-shadow filter to colorize black SVG */
+    /* Target color: #2B6BFF (Brighter Blue) */
+    /* Black to Blue filter approximation */
+    filter: invert(34%) sepia(62%) saturate(4644%) hue-rotate(216deg) brightness(101%) contrast(106%);
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+  padding: 0 10rpx;
+}
+
+.modal-content {
+  padding: 32rpx;
+  /* Reduce excessive bottom padding that might cause the whitespace */
+  padding-bottom: 40rpx; 
+  flex: 1; /* This makes it fill the available space up to max-height */
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Evidence Group Header */
+.evidence-group {
+    margin-bottom: 48rpx;
+}
+
+.evidence-group-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24rpx;
+    gap: 16rpx;
+}
+
+.number-badge {
+    width: 40rpx;
+    height: 40rpx;
+    background: #1A2B49; /* Dark Blue */
+    color: #fff;
+    font-size: 24rpx;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.evidence-group-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #1A2B49;
+}
+
+/* Check List Items */
+.evidence-list {
+    padding-left: 20rpx; /* Align with title roughly */
+}
+
+.evidence-check-item {
+    display: flex;
+    align-items: flex-start; /* Align top for multiline */
+    margin-bottom: 24rpx;
+    gap: 16rpx;
+}
+
+.evidence-check-item.column {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12rpx;
+}
+
+.evidence-check-item .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16rpx;
+}
+
+.check-icon {
+    width: 32rpx;
+    height: 32rpx;
+    flex-shrink: 0;
+    margin-top: 6rpx;
+    /* Target color: #07C160 (Green) */
+    filter: invert(56%) sepia(87%) saturate(382%) hue-rotate(97deg) brightness(91%) contrast(89%);
+}
+
+.check-text {
+    font-size: 28rpx;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Action Tags/Pills */
+.link-tag {
+    font-size: 24rpx;
+    color: #4A90E2;
+    background: rgba(74, 144, 226, 0.1);
+    padding: 4rpx 12rpx;
+    border-radius: 8rpx;
+    margin-left: 12rpx;
+    white-space: nowrap;
+}
+
+.link-pill {
+    font-size: 24rpx;
+    color: #4A90E2;
+    background: rgba(74, 144, 226, 0.1);
+    padding: 8rpx 24rpx;
+    border-radius: 30rpx;
+    display: inline-block;
+    margin-left: 48rpx; /* Indent under check icon */
+}
+
+.link-pill.small {
+    margin-left: 0;
+    margin-top: 12rpx;
+}
+
+/* Special Evidence Description */
+.evidence-desc {
+    font-size: 26rpx;
+    color: #666;
+    margin-bottom: 24rpx;
+    padding-left: 56rpx; /* Align under badge */
+}
+
+/* Cards */
+.evidence-cards {
+    padding-left: 20rpx;
+    padding-bottom: 0; /* Removed padding */
+}
+
+.evidence-card {
+    background: #F7F9FC;
+    border-radius: 16rpx;
+    padding: 24rpx; 
+    margin-bottom: 24rpx;
+    display: block; 
+    border: none;
+    height: auto;
+    min-height: 0;
+}
+
+/* Removed card-icon styles */
+
+.card-content {
+    /* No flex needed */
+    width: 100%;
+}
+
+.card-title {
+    font-size: 28rpx; /* Reduced from 30rpx */
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 8rpx; /* Reduced gap */
+    position: relative;
+    padding-left: 0;
+}
+
+/* Add small blue file icon before title using pseudo-element to match style */
+.card-title::before {
+    display: none;
+}
+
+.card-desc {
+    font-size: 26rpx; /* Reduced from 28rpx */
+    color: #666;
+    line-height: 1.5; /* Slightly tighter line height */
+    display: block;
+    padding-left: 0; 
+}
+
+.modal-footer-placeholder {
+    height: 0; /* Remove extra space */
+    flex-shrink: 0; 
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner-small {
+  width: 24rpx;
+  height: 24rpx;
+  border: 3rpx solid var(--primary-color);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8rpx;
+}
+
+/* 白色加载动画（用于深色按钮） */
+.loading-spinner-white {
+  width: 24rpx;
+  height: 24rpx;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8rpx;
+}
+
+/* 按钮加载状态布局 */
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Picker Arrow */
+.picker-arrow {
+  width: 32rpx; 
+  height: 32rpx; 
+  opacity: 0.3;
+}
+
+/* Agent Form Container */
+.agent-form-container {
+  margin-top: 32rpx; 
+  padding-top: 32rpx; 
+  border-top: 1rpx solid var(--border-color);
+}
+
+/* Warning Banner - Removed from here */
+
+/* Bottom Warning */
+.bottom-warning {
+  margin-top: 32rpx;
+  padding: 24rpx;
+  background-color: rgba(0,0,0,0.02);
+  border-radius: 12rpx;
+  text-align: center;
+}
+
+.bottom-warning text {
+  font-size: 24rpx;
+  color: #909399;
+  line-height: 1.6;
+}
+
+/* Disclaimer Modal Specifics */
+.modal-icon-warning {
+  width: 40rpx;
+  height: 40rpx;
+  /* Orange filter */
+  filter: invert(74%) sepia(34%) saturate(2252%) hue-rotate(356deg) brightness(101%) contrast(98%);
+}
+
+.warning-text-box {
+  background-color: #FFFBE6;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  margin-bottom: 32rpx;
+}
+
+.warning-text-box text {
+  font-size: 28rpx;
+  color: #E6A23C;
+  line-height: 1.6;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 0;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border: 2rpx solid #DCDFE6;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.checkbox.checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkmark {
+  width: 10rpx;
+  height: 18rpx;
+  border-right: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(45deg) translate(-1rpx, -2rpx);
+}
+
+.checkbox-label {
+  font-size: 28rpx;
+  color: var(--text-main);
+}
+
+.modal-footer {
+  padding: 24rpx 32rpx;
+  border-top: 1rpx solid #F0F2F5;
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .warning-banner {
+    background-color: rgba(230, 162, 60, 0.1);
+    border-bottom-color: rgba(255,255,255,0.05);
+  }
+  
+  .bottom-warning {
+    background-color: rgba(255,255,255,0.05);
+  }
+  
+  .bottom-warning text {
+    color: #6B7280;
+  }
+  
+  .warning-text-box {
+    background-color: rgba(230, 162, 60, 0.1);
+  }
+  
+  .checkbox {
+    border-color: #4B5563;
+  }
+  
+  .modal-footer {
+    border-top-color: #374151;
+  }
+
+  /* --- Modal Styles --- */
+  .modal-container {
+    background-color: #1F2937; /* Gray 800 */
+    border: 1px solid #374151; /* Gray 700 */
+  }
+  
+  .modal-header {
+    border-bottom-color: #374151;
+  }
+  
+  .modal-title {
+    color: #E5E7EB; /* Gray 200 */
+  }
+  
+  .modal-close {
+    color: #9CA3AF; /* Gray 400 */
+  }
+  
+  .number-badge {
+    background-color: #3B82F6; /* Brighter Blue */
+    color: #FFFFFF;
+  }
+  
+  .evidence-group-title {
+    color: #E5E7EB; /* Gray 200 */
+  }
+  
+  .evidence-card {
+    background-color: rgba(31, 41, 55, 0.5) !important; /* Semi-transparent Gray 800 - Override global */
+    border: 1px solid #374151;
+  }
+  
+  .card-title {
+    color: #E5E7EB; /* Gray 200 */
+  }
+  
+  .card-desc {
+    color: #9CA3AF; /* Gray 400 */
+  }
+  
+  .check-text {
+    color: #D1D5DB; /* Gray 300 */
+  }
+  
+  /* Adjust link colors for dark mode */
+  .link-tag, .link-pill {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60A5FA; /* Blue 400 */
+  }
+
+  /* --- Preview Styles --- */
+  .result-text-partial {
+    color: #D1D5DB; /* Gray 300 */
+  }
+
+  .preview-mask {
+    /* Dark gradient: Transparent -> Dark Background (#000 or #111827) */
+    background: linear-gradient(to bottom, rgba(17, 24, 39, 0) 0%, rgba(17, 24, 39, 0.8) 70%, #111827 100%);
+  }
+
+  .preview-mask-text {
+    color: #9CA3AF; /* Gray 400 */
+  }
+
+  /* --- Form & Selection Styles --- */
+  .selection-header {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  .selection-header.selected {
+    background-color: #1F2937; /* Gray 800 */
+    border-color: #2563EB; /* Primary Blue */
+  }
+
+  .selection-header.selected.has-sub {
+      border-bottom-color: #2563EB;
+  }
+  
+  /* Checkbox Inner Parts */
+  .checkbox-list-check {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  .selection-header.selected .checkbox-list-check {
+    background-color: rgba(37, 99, 235, 0.2);
+    border-color: #2563EB;
+  }
+  
+  .checkbox-list-text {
+    color: var(--text-main);
+  }
+  
+  .selection-header.selected .checkbox-list-text {
+    color: #60A5FA; /* Blue 400 */
+  }
+
+  /* Sub Input Dark Mode */
+  .sub-input-container {
+    background-color: rgba(31, 41, 55, 0.6); /* Gray 800 opacity */
+    border-color: #374151; /* Gray 700 */
+  }
+  
+  .sub-input-box {
+    background-color: #111827; /* Gray 900 */
+    border-color: #4B5563; /* Gray 600 */
+  }
+  
+  .sub-input-icon-box {
+    background-color: #374151; /* Gray 700 */
+  }
+  
+  .selection-header.selected + .sub-input-container .sub-input-icon-box {
+     background-color: #374151;
+  }
+
+  .sub-input-icon-img {
+    filter: invert(1);
+    opacity: 0.9;
+  }
+  
+  .sub-input-label {
+    color: #9CA3AF;
+  }
+  
+  .sub-input {
+    color: #F9FAFB;
+  }
+  
+  .sub-input::placeholder {
+    color: #6B7280;
+  }
+
+  /* Sub Radio Items (Yes/No) Dark Mode */
+  .sub-radio-item {
+    background-color: #111827; /* Gray 900 */
+    color: #F9FAFB; /* Gray 50 */
+    border: 2rpx solid #374151; /* Gray 700 */
+    box-shadow: none;
+  }
+
+  .sub-radio-item.selected {
+    background-color: #2563EB; /* Primary Blue */
+    border-color: #2563EB;
+    color: #FFFFFF;
+  }
+
+  /* Switch Group Dark Mode */
+  .sub-switch-group {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .sub-switch-item {
+    color: var(--text-sub);
+  }
+
+  .sub-switch-item.selected {
+    background-color: #2563EB; /* Primary Blue */
+    color: #FFFFFF;
+    box-shadow: 0 2rpx 8rpx rgba(37, 99, 235, 0.3);
+  }
+
+  /* Radio/Agent Toggle items */
+  .agent-toggle-item, .radio-list-card, .sub-radio-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  .agent-toggle-item.selected, .radio-list-card.selected, .sub-radio-item.selected {
+      background-color: rgba(59, 130, 246, 0.15);
+      border-color: var(--primary-color);
+  }
+
+  /* Ensure text colors in dark mode */
+  .agent-toggle-text, .radio-list-title {
+      color: var(--text-main);
+  }
+  
+  .agent-toggle-item.selected .agent-toggle-text, 
+  .radio-list-card.selected .radio-list-title {
+      color: var(--blue-text);
+  }
+  
+  .radio-list-desc {
+    color: var(--text-sub);
+  }
+  
+  .radio-list-radio {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  .radio-list-card.selected .radio-list-radio {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  /* Segmented Control Dark Mode */
+  .radio-group.segmented {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .segment-indicator {
+    box-shadow: 0 4rpx 12rpx rgba(17, 82, 212, 0.35);
+  }
+  
+  .radio-segment-text {
+    color: var(--text-sub);
+  }
+  
+  .radio-segment.selected .radio-segment-text {
+    color: #ffffff;
+  }
+  
+  /* Buttons Dark Mode */
+  .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    box-shadow: 0 4rpx 12rpx rgba(59, 130, 246, 0.3);
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-main);
+  }
+  
+  .picker-arrow {
+    filter: invert(1);
+    opacity: 0.6;
+  }
+  
+  .picker-text {
+    color: var(--text-main);
+  }
+  
+  .picker-placeholder {
+    color: var(--text-placeholder);
+  }
+}
+
+/* Signature Tips Styles */
+.signature-tips {
+  margin-top: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding-left: 40rpx;
+}
+
+.tip-number {
+  color: var(--primary-color);
+  font-size: 28rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: var(--text-main);
+  line-height: 1.5;
+}
